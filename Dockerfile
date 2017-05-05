@@ -9,14 +9,15 @@ ENV FLYWAY_DBMS=postgresql \
     FLYWAY_HOST=db \
     FLYWAY_PORT=5432 \
     FLYWAY_DATABASE_NAME=meta \
-    FLYWAY_SCHEMAS=public
+    FLYWAY_SCHEMAS=public \
+    CDE_DEFINITIONS=""
 
 COPY sql/create.sql /flyway/sql/V1_0__create.sql
 COPY docker/CDE-definition.sql.tmpl /src/
-COPY docker/insert-CDE-definition.sh /
+COPY docker/run.sh docker/insert-CDE-definition.sh /
 COPY variables_schema.json /src/
 
-RUN chmod +x /insert-CDE-definition.sh
+RUN chmod +x /run.sh /insert-CDE-definition.sh
 
 WORKDIR /flyway
 CMD ["migrate"]
