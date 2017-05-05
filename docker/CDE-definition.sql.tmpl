@@ -1,0 +1,5 @@
+DELETE from meta_variables where source='{{ .Env.CDE_NAME }}';
+INSERT INTO meta_variables (source, hierarchy) VALUES (
+  '{{ .Env.CDE_NAME }}',
+  '{{ .Env.CDE_JSON_HIERARCHY }}'
+);

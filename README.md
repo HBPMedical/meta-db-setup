@@ -1,5 +1,5 @@
 [![CHUV](https://img.shields.io/badge/CHUV-LREN-AF4C64.svg)](https://www.unil.ch/lren/en/home.html) [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](https://github.com/LREN-CHUV/meta-db-setup/blob/master/LICENSE)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/9adcf4cbd730472386d0e71ab27b9b6b)](https://www.codacy.com/app/mirco-nasuti/meta-db-setup?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=LREN-CHUV/meta-db-setup&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/TODO)](https://www.codacy.com/app/hbpmip/meta-db-setup?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=LREN-CHUV/meta-db-setup&amp;utm_campaign=Badge_Grade)
 [![CircleCI](https://circleci.com/gh/LREN-CHUV/meta-db-setup.svg?style=svg)](https://circleci.com/gh/LREN-CHUV/meta-db-setup)
 
 # Setup for database 'meta-db'
@@ -8,9 +8,14 @@
 
 This project uses Flyway to manage the database migration scripts for the 'meta-db' database used by MIP.
 
+This database contains the metadata used for reference, including:
+
+* the list of variables and groups for the Common Data Elements (CDE) defined by MIP.
+
 ## Usage
 
 Run:
+
 ```console
 $ docker run -i -t --rm -e FLYWAY_DBMS=postgres -e FLYWAY_HOST=`hostname` hbpmip/meta-db-setup:1.0.1 migrate
 ```
