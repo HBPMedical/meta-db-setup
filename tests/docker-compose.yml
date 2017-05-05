@@ -1,0 +1,46 @@
+version: '2'
+
+services:
+
+  meta_db:
+    image: "postgres:9.6.2-alpine"
+    container_name: "meta-db"
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=meta
+      - POSTGRES_PASSWORD=meta
+
+  wait_dbs:
+    image: "waisbrot/wait"
+    links:
+      - "meta_db:meta_db"
+    environment:
+      - TARGETS=meta_db:5432
+
+  # Use the latest image built as this is what is under test
+  meta_db_setup:
+    image: "hbpmip/meta-db-setup:latest"
+    container_name: "meta-db-setup"
+    environment:
+      - FLYWAY_DBMS=postgresql
+      - FLYWAY_HOST=db
+      - FLYWAY_PORT=5432
+      - FLYWAY_DATABASE_NAME=meta
+      - FLYWAY_USER=meta
+      - FLYWAY_PASSWORD=meta
+    links:
+     - "meta_db:db"
+
+  meta_db_check:
+    image: "hbpmip/pgtap:0.96.0-3"
+    container_name: "meta-db-check"
+    environment:
+      - HOST=db
+      - PORT=5432
+      - DATABASE=meta
+      - USER=meta
+      - PASSWORD=meta
+    volumes:
+      - ./sql:/test
+    links:
+      - "meta_db:db"
