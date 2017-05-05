@@ -12,8 +12,11 @@ ENV FLYWAY_DBMS=postgresql \
     FLYWAY_SCHEMAS=public
 
 COPY sql/create.sql /flyway/sql/V1_0__create.sql
-COPY docker/CDE-definition.sql.tmpl /docker/insert-CDE-definition.sh /src/
+COPY docker/CDE-definition.sql.tmpl /src/
+COPY docker/insert-CDE-definition.sh /
 COPY variables_schema.json /src/
+
+RUN chmod +x /insert-CDE-definition.sh
 
 WORKDIR /flyway
 CMD ["migrate"]
