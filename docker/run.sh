@@ -18,11 +18,13 @@ if [ ! -z "$@" ]; then
     fi
 fi
 
-IFS=", "
-for def in "$CDE_DEFINITIONS";
-do
-  /insert-CDE-definition.sh $def
-done
-unset IFS
+if [ -n "$CDE_DEFINITIONS" ]; then
+  IFS=", "
+  for def in "$CDE_DEFINITIONS";
+  do
+    /insert-CDE-definition.sh $def
+  done
+  unset IFS
+fi
 
 exec dockerize $DOCKERIZE_OPTS flyway $@
