@@ -1,0 +1,127 @@
+{
+  "definitions": {
+    "enumeration": {
+      "description": "A code-value match",
+      "properties": {
+        "code": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "number"
+            }
+          ]
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "number"
+            }
+          ]
+        }
+      },
+      "type": "object"
+    },
+    "group": {
+      "description": "A group object represents a category which groups and variables can belong to.",
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "groups": {
+          "items": {
+            "$ref": "#/definitions/group"
+          },
+          "type": "array"
+        },
+        "label": {
+          "type": "string"
+        },
+        "variables": {
+          "items": {
+            "$ref": "#/definitions/variable"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "methodology": {
+      "type": "string"
+    },
+    "variable": {
+      "description": "A variable object represents a business variable. All variable information should be stored in this object.",
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "length": {
+          "type": "integer"
+        },
+        "methodology": {
+          "$ref": "#/definitions/methodology"
+        },
+        "type": {
+          "enum": [
+            "integer",
+            "real",
+            "boolean",
+            "date",
+            "polynominal",
+            "binominal",
+            "text",
+            "image"
+          ],
+          "enumerations": {
+            "items": {
+              "$ref": "#/definitions/enumeration"
+            },
+            "type": "array"
+          }
+        },
+        "units": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "description": "Schema for the variables. It is represented as a tree of groups (starting with a root group) which leaves are variables.",
+  "properties": {
+    "code": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "groups": {
+      "items": {
+        "$ref": "#/definitions/group"
+      },
+      "type": "array"
+    },
+    "label": {
+      "type": "string"
+    },
+    "variables": {
+      "items": {
+        "$ref": "#/definitions/variable"
+      },
+      "type": "array"
+    }
+  },
+  "type": "object"
+}
