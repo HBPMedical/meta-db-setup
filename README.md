@@ -1,5 +1,4 @@
-[![CHUV](https://img.shields.io/badge/CHUV-LREN-AF4C64.svg)](https://www.unil.ch/lren/en/home.html) [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](https://github.com/LREN-CHUV/meta-db-setup/blob/master/LICENSE)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/TODO)](https://www.codacy.com/app/hbpmip/meta-db-setup?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=LREN-CHUV/meta-db-setup&amp;utm_campaign=Badge_Grade)
+[![CHUV](https://img.shields.io/badge/CHUV-LREN-AF4C64.svg)](https://www.unil.ch/lren/en/home.html) [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](https://github.com/LREN-CHUV/meta-db-setup/blob/master/LICENSE) [![DockerHub](https://img.shields.io/badge/docker-hbpmip%2Fmeta--db--setup-008bb8.svg)](https://hub.docker.com/r/hbpmip/meta-db-setup/) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/f3d7d66596844196bb8912f18bb33931)](https://www.codacy.com/app/hbpmip/meta-db-setup?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=LREN-CHUV/meta-db-setup&amp;utm_campaign=Badge_Grade)
 [![CircleCI](https://circleci.com/gh/LREN-CHUV/meta-db-setup.svg?style=svg)](https://circleci.com/gh/LREN-CHUV/meta-db-setup)
 
 # Setup for database 'meta-db'
