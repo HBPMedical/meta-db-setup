@@ -28,6 +28,8 @@ services:
       - FLYWAY_DATABASE_NAME=meta
       - FLYWAY_USER=meta
       - FLYWAY_PASSWORD=meta
+      - CDE_NAME=test
+      - CDE_TARGET_TABLE=test_table
     links:
      - "meta_db:db"
 

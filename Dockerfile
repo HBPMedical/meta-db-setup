@@ -12,10 +12,12 @@ ENV FLYWAY_DBMS=postgresql \
     FLYWAY_SCHEMAS=public \
     CDE_DEFINITIONS=""
 
-COPY sql/create.sql /flyway/sql/V1_0__create.sql
+COPY sql/V1_0__create.sql /flyway/sql/V1_0__create.sql
+COPY sql/V2_0__add_target_table.sql /flyway/sql/V2_0__add_target_table.sql
 COPY docker/CDE-definition.sql.tmpl /src/
 COPY docker/run.sh docker/insert-CDE-definition.sh /
 COPY variables_schema.json /src/
+COPY tests/test-variables.json /src/variables/test.json
 
 RUN chmod +x /run.sh /insert-CDE-definition.sh
 

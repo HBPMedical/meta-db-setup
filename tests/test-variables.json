@@ -1,0 +1,48 @@
+{
+  "code": "root",
+  "groups": [
+    {
+      "code": "brain",
+      "groups": [
+        {
+          "code": "cognition",
+          "groups": [
+            {
+              "code": "moca",
+              "label": "MOCA",
+              "variables": [
+                {
+                  "code": "montrealcognitiveassessment",
+                  "description": "Montreal Cognitive Assessment (MoCA). was designed as a rapid screening instrument for mild cognitive dysfunction. It assesses different cognitive domains: a ttention and concentration, executive functions, memory, language, visuoconstructional skills, conceptual thinking, calculations, and orientation. Time to administer the MoCA is approximately 10 minutes. The total possible score is 30 points; a score of 26 or above is considered normal.",
+                  "label": "MOCA",
+                  "maxValue": 30,
+                  "methodology": "clm",
+                  "minValue": 0,
+                  "type": "integer"
+                }
+              ]
+            },
+            {
+              "code": "mmse",
+              "label": "MMSE",
+              "variables": [
+                {
+                  "code": "minimentalstate",
+                  "description": "MMSE Total score. Mini-Mental State Examination (MMSE): is a global assessment of cognitive status (Folstein et al., 1975).The MMSE is a fully structured scale that consists of 30 points grouped into seven categories. A perfect score is 30 points; a score of 24 is the recommended, and most frequently used, cutpoint for dementia; a score of 23 or lower indicates dementia. ",
+                  "label": "MMSE",
+                  "maxValue": 30,
+                  "methodology": "clm",
+                  "minValue": 0,
+                  "type": "integer"
+                }
+              ]
+            }
+          ],
+          "label": "cognition"
+        }
+      ],
+      "label": "clinical"
+    }
+  ],
+  "label": "root"
+}
