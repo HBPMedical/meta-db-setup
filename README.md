@@ -32,6 +32,14 @@ where the environment variables are:
 * FLYWAY_SCHEMAS: Optional, comma-separated list of schemas managed by Flyway
 * FLYWAY_TABLE: Optional, name of Flyway's metadata table (default: schema_version)
 
+Child images should follow the following procedure to be able to load their metadata:
+
+* Define the environment variable CDE_DEFINITIONS defining a comma-separated list of definitions to load.
+* Define the environment variable CDE_TARGET_TABLES defining a comma-separated list of target tables maching each definitions.
+* For each definition, place a file named [definition].json into folder /src/variables/
+
+Each definition, target table and hierarchy json will be inserted into the meta table.
+
 ## Build
 
 Run: `./build.sh`

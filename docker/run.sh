@@ -20,12 +20,12 @@ if [ ! -z "$@" ]; then
 fi
 
 if [ -n "$CDE_DEFINITIONS" ]; then
-  IFS=", "
-  for def in "$CDE_DEFINITIONS";
+  IFS=", " read -a defs <<<"$CDE_DEFINITIONS"
+  IFS=", " read -a targets <<<"$CDE_TARGET_TABLES"
+  for ((i = 0; i < "${#defs[@]}"; i++))
   do
-    /insert-CDE-definition.sh $def
+    /insert-CDE-definition.sh ${defs[$i]} ${targets[$i]}
   done
-  unset IFS
 fi
 
 exec dockerize $DOCKERIZE_OPTS flyway $@
