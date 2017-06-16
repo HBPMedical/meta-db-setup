@@ -9,6 +9,8 @@ ENV FLYWAY_DBMS=postgresql \
     FLYWAY_HOST=db \
     FLYWAY_PORT=5432 \
     FLYWAY_DATABASE_NAME=meta \
+    FLYWAY_USER=meta \
+    FLYWAY_PASSWORD=meta \
     FLYWAY_SCHEMAS=public \
     CDE_DEFINITIONS=""
 
