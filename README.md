@@ -16,7 +16,7 @@ This database contains the metadata used for reference, including:
 Run:
 
 ```console
-$ docker run -i -t --rm -e FLYWAY_HOST=`hostname` hbpmip/meta-db-setup:1.1.1 migrate
+$ docker run -i -t --rm -e FLYWAY_HOST=`hostname` hbpmip/meta-db-setup:1.1.2 migrate
 ```
 
 where the environment variables are:
