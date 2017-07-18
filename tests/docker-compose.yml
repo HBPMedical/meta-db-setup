@@ -16,6 +16,7 @@ services:
       - "meta_db:meta_db"
     environment:
       - TARGETS=meta_db:5432
+      - TIMEOUT=60
 
   # Use the latest image built as this is what is under test
   meta_db_setup:
@@ -33,8 +34,11 @@ services:
     links:
      - "meta_db:db"
 
+  # Issues with volume mounting here, workaround by building an image including the sources
   meta_db_check:
-    image: "hbpmip/pgtap:0.96.0-3"
+    build:
+      context: .
+      dockerfile: Dockerfile.check
     container_name: "meta-db-check"
     environment:
       - HOST=db
@@ -42,7 +46,5 @@ services:
       - DATABASE=meta
       - USER=meta
       - PASSWORD=meta
-    volumes:
-      - ./sql:/test
     links:
       - "meta_db:db"

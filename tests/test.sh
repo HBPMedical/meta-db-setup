@@ -16,14 +16,17 @@ get_script_dir () {
 
 cd "$(get_script_dir)"
 
-if groups $USER | grep &>/dev/null '\bdocker\b'; then
+if [[ $NO_SUDO || -n "$CIRCLECI" ]]; then
+  DOCKER_COMPOSE="docker-compose"
+elif groups $USER | grep &>/dev/null '\bdocker\b'; then
   DOCKER_COMPOSE="docker-compose"
 else
   DOCKER_COMPOSE="sudo docker-compose"
 fi
 
-$DOCKER_COMPOSE up -d meta_db
+$DOCKER_COMPOSE up -d --remove-orphans meta_db
 $DOCKER_COMPOSE run wait_dbs
+$DOCKER_COMPOSE build meta_db_check
 
 echo
 echo "Test initial database migration"
