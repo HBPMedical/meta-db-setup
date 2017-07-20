@@ -86,6 +86,10 @@
         "methodology": {
           "$ref": "#/definitions/methodology"
         },
+        "sql_type": {
+          "description": "SQL type of the variable stored in a relational database (PostgresQL)",
+          "type": "string"
+        },
         "type": {
           "description": "Type of the variable",
           "enum": [
