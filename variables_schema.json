@@ -11,7 +11,8 @@
             {
               "type": "number"
             }
-          ]
+          ],
+          "description": "Value stored in the database"
         },
         "value": {
           "anyOf": [
@@ -21,7 +22,8 @@
             {
               "type": "number"
             }
-          ]
+          ],
+          "description": "Human readable value displayed in the user interface"
         }
       },
       "type": "object"
@@ -30,21 +32,26 @@
       "description": "A group object represents a category which groups and variables can belong to.",
       "properties": {
         "code": {
+          "description": "Identifier for the group",
           "type": "string"
         },
         "description": {
+          "description": "Human readable description of the group",
           "type": "string"
         },
         "groups": {
+          "description": "List of sub-groups",
           "items": {
             "$ref": "#/definitions/group"
           },
           "type": "array"
         },
         "label": {
+          "description": "Label used to display the group in the user interface",
           "type": "string"
         },
         "variables": {
+          "description": "List of variables contained in the group",
           "items": {
             "$ref": "#/definitions/variable"
           },
@@ -54,27 +61,33 @@
       "type": "object"
     },
     "methodology": {
+      "description": "Methodology used to acquire the variable",
       "type": "string"
     },
     "variable": {
       "description": "A variable object represents a business variable. All variable information should be stored in this object.",
       "properties": {
         "code": {
+          "description": "Identifier for the variable",
           "type": "string"
         },
         "description": {
+          "description": "Human readable description of the variable",
           "type": "string"
         },
         "label": {
+          "description": "Label used to display the variable in the user interface",
           "type": "string"
         },
         "length": {
+          "description": "Maximum length of the string",
           "type": "integer"
         },
         "methodology": {
           "$ref": "#/definitions/methodology"
         },
         "type": {
+          "description": "Type of the variable",
           "enum": [
             "integer",
             "real",
@@ -84,15 +97,10 @@
             "binominal",
             "text",
             "image"
-          ],
-          "enumerations": {
-            "items": {
-              "$ref": "#/definitions/enumeration"
-            },
-            "type": "array"
-          }
+          ]
         },
         "units": {
+          "description": "Units of measure",
           "type": "string"
         }
       },
@@ -102,21 +110,26 @@
   "description": "Schema for the variables. It is represented as a tree of groups (starting with a root group) which leaves are variables.",
   "properties": {
     "code": {
+      "description": "Code for the root element",
       "type": "string"
     },
     "description": {
+      "description": "Description for the root element",
       "type": "string"
     },
     "groups": {
+      "description": "List of groups located under root",
       "items": {
         "$ref": "#/definitions/group"
       },
       "type": "array"
     },
     "label": {
+      "description": "Label for the root element",
       "type": "string"
     },
     "variables": {
+      "description": "List of variables located under root",
       "items": {
         "$ref": "#/definitions/variable"
       },
