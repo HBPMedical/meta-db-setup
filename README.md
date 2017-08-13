@@ -5,11 +5,14 @@
 
 ## Introduction
 
-This project uses Flyway to manage the database migration scripts for the 'meta-db' database used by MIP.
+This Docker image manages the database migration scripts for the 'meta-db' database used by MIP.
 
 This database contains the metadata used for reference, including:
 
 * the list of variables and groups for the Common Data Elements (CDE) defined by MIP.
+* the list of variables and groups for other datasets available in MIP.
+
+It uses Flyway to perform the versioned database migrations.
 
 ## Usage
 
