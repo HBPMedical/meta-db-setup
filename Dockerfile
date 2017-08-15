@@ -1,26 +1,18 @@
 # Build stage for Java classes
 FROM bigtruedata/sbt:0.13.15-2.11.8 as build-scala-env
 
+RUN apk add --update --no-cache git
 ENV HOME=/root
-COPY docker/seed-src /project/docker/seed-src
-COPY pom.xml /project/
-WORKDIR /project
+COPY project/ /sources/project/
+COPY build.sbt /sources/
+WORKDIR /sources
 
-# Run Maven on an empty project and force it to download most of its dependencies to fill the cache
-RUN mkdir -p /usr/share/maven/ref/repository \
-    && cp /usr/share/maven/ref/settings-docker.xml /root/.m2/settings.xml \
-    && mvn -DSEED=true clean \
-        resources:resources \
-        compiler:compile \
-        surefire:test \
-        jar:jar \
-        package
+# Run sbt on an empty project and force it to download most of its dependencies to fill the cache
+RUN sbt compile
 
-COPY src/ /project/src/
+COPY src/ /sources/src/
 
-# Repeating the file copy works better. I dunno why.
-RUN cp /usr/share/maven/ref/settings-docker.xml /root/.m2/settings.xml \
-    && mvn clean package
+RUN sbt assembly
 
 # Final image
 FROM hbpmip/flyway:4.2.0-5
@@ -30,16 +22,11 @@ ARG BUILD_DATE
 ARG VCS_REF
 ARG VERSION
 
-COPY --from=build-java-env /project/target/data-db-setup.jar /usr/share/jars/
-COPY --from=build-java-env \
-        /usr/share/maven/ref/repository/net/sf/supercsv/super-csv/2.4.0/super-csv-2.4.0.jar \
-        /usr/share/maven/ref/repository/org/apache/commons/commons-lang3/3.5/commons-lang3-3.5.jar \
-        /usr/share/maven/ref/repository/com/github/spullara/mustache/java/compiler/0.9.5/compiler-0.9.5.jar \
-        /flyway/jars/
+COPY --from=build-scala-env /sources/target/scala-2.12/meta-db-setup.jar /flyway/jars/
 
 COPY sql/V1_0__create.sql \
      sql/V2_0__add_target_table.sql \
-     sql/V2_1__add_hierarchy_patch.sql /flyway/sql/
+     sql/V2_1__add_hierarchy_patch_table.sql /flyway/sql/
 
 COPY docker/CDE-definition.sql.tmpl /src/
 COPY docker/run.sh docker/insert-CDE-definition.sh /
@@ -55,6 +42,7 @@ ENV FLYWAY_DBMS=postgresql \
     FLYWAY_USER=meta \
     FLYWAY_PASSWORD=meta \
     FLYWAY_SCHEMAS=public \
+    FLYWAY_MIGRATION_PACKAGE="eu/humanbrainproject/mip/migrations/meta" \
     CDE_DEFINITIONS=""
 
 ENV IMAGE="hbpmip/data-db-setup:$VERSION"

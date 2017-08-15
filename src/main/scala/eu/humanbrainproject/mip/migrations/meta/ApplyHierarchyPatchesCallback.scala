@@ -74,6 +74,7 @@ class ApplyHierarchyPatchesCallback extends BaseFlywayCallback {
     } yield (rm, added)
 
     regenerateMeta.foldMap(nat).run(connection).unsafePerformIO
-  }
+    ()
 
+  }
 }

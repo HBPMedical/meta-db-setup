@@ -28,6 +28,7 @@ package object meta {
   type Seq[+A]         = scala.collection.immutable.Seq[A]
   type IndexedSeq[+A]  = scala.collection.immutable.IndexedSeq[A]
 
+  @SuppressWarnings(Array("org.wartremover.warts.Throw"))
   implicit val JsonMeta: Meta[Json] =
     Meta
       .other[PGobject]("jsonb")

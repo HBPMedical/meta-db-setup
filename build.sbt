@@ -8,13 +8,16 @@ lazy val `meta-db-setup` =
     .enablePlugins(AutomateHeaderPlugin, GitVersioning, GitBranchPrompt)
     .settings(settings)
     .settings(
-      libraryDependencies ++= Seq(
-        library.doobieCore,
-        library.doobiePostgres,
-        library.diffson,
-        library.flywayDb,
-        library.scalaCheck % Test,
-        library.scalaTest  % Test
+      Seq(
+        assemblyJarName in assembly := "meta-db-setup.jar",
+        libraryDependencies ++= Seq(
+          library.doobieCore,
+          library.doobiePostgres,
+          library.diffson,
+          library.flywayDb,
+          library.scalaCheck % Test,
+          library.scalaTest  % Test
+        )
       )
     )
 
@@ -71,7 +74,8 @@ lazy val commonSettings =
     ),
     unmanagedSourceDirectories.in(Compile) := Seq(scalaSource.in(Compile).value),
     unmanagedSourceDirectories.in(Test) := Seq(scalaSource.in(Test).value),
-    wartremoverWarnings in (Compile, compile) ++= Warts.unsafe
+    wartremoverWarnings in (Compile, compile) ++= Warts.unsafe,
+    test in assembly := {}
 )
 
 lazy val gitSettings =
