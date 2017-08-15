@@ -1,5 +1,5 @@
 # Build stage for Java classes
-FROM maven:3.5.0-jdk-8-alpine as build-java-env
+FROM bigtruedata/sbt:0.13.15-2.11.8 as build-scala-env
 
 ENV HOME=/root
 COPY docker/seed-src /project/docker/seed-src
