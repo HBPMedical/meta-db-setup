@@ -37,8 +37,10 @@ COPY --from=build-java-env \
         /usr/share/maven/ref/repository/com/github/spullara/mustache/java/compiler/0.9.5/compiler-0.9.5.jar \
         /flyway/jars/
 
-COPY sql/V1_0__create.sql /flyway/sql/V1_0__create.sql
-COPY sql/V2_0__add_target_table.sql /flyway/sql/V2_0__add_target_table.sql
+COPY sql/V1_0__create.sql \
+     sql/V2_0__add_target_table.sql \
+     sql/V2_1__add_hierarchy_patch.sql /flyway/sql/
+
 COPY docker/CDE-definition.sql.tmpl /src/
 COPY docker/run.sh docker/insert-CDE-definition.sh /
 COPY variables_schema.json /src/
