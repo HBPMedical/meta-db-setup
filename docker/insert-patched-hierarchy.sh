@@ -4,7 +4,7 @@ set -e
 SOURCE=$1
 NEW_SOURCE=$2
 TARGET_TABLE=$3
-JSON_PATCH=`cat /src/variables/$NEW_SOURCE.patch.json`
+JSON_PATCH=`cat /src/patches/$NEW_SOURCE.patch.json`
 
 # Create a repeatable migration for Flyway
 SOURCE="$SOURCE" \
