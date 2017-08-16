@@ -4,7 +4,7 @@
 ## 2.0.0
 
 * Support patching hierarchy jsons to generate new sets of variables definitions
-* Changed configuration by environment variables for the list of variables definitions to insert. It now uses DATA_ELEMENTSenvironment variable.
+* Changed configuration by environment variables for the list of variables definitions to insert. It now uses DATA_ELEMENTS environment variable.
 
 ## 1.2.0
 
