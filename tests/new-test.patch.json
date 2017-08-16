@@ -1,0 +1,13 @@
+[
+  {
+    "op": "add",
+    "path": "/groups/0/groups/0/groups/0/variables/-",
+    "value": {
+      "code": "mycategory",
+      "description": "My additional category",
+      "label": "My Category",
+      "methodology": "test",
+      "type": "string"
+    }
+  }
+]

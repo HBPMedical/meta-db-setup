@@ -1,13 +1,18 @@
 
 # Changelog
 
+## 2.0.0
+
+* Support patching hierarchy jsons to generate new sets of variables definitions
+* Changed configuration by environment variables for the list of variables definitions to insert. It now uses DATA_ELEMENTSenvironment variable.
+
 ## 1.2.0
 
 * Add sql_type to variables
 
 ## 1.1.1 - 2017-05-24
 
-* Support multiple CDE definitions and target tables
+* Support multiple data elements definitions and target tables
 
 ## 1.1.0 - 2017-05-24
 

@@ -1,0 +1,8 @@
+# Use the latest image built as this is what is under test
+FROM hbpmip/meta-db-setup:latest
+
+COPY test-variables.json /src/variables/test.json
+COPY new-test.patch.json /src/variables/new-test.patch.json
+
+ENV DATA_ELEMENTS=test|test_table \
+    HIERARCHY_PATCHES=test|new-test|test_table

@@ -20,7 +20,9 @@ services:
 
   # Use the latest image built as this is what is under test
   meta_db_setup:
-    image: "hbpmip/meta-db-setup:latest"
+    build:
+      context: .
+      dockerfile: Dockerfile.test
     container_name: "meta-db-setup"
     environment:
       - FLYWAY_DBMS=postgresql
@@ -29,8 +31,6 @@ services:
       - FLYWAY_DATABASE_NAME=meta
       - FLYWAY_USER=meta
       - FLYWAY_PASSWORD=meta
-      - CDE_DEFINITIONS=test
-      - CDE_TARGET_TABLES=test_table
     links:
      - "meta_db:db"
 

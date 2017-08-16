@@ -90,6 +90,6 @@ related_projects:
   - name: data-db-setup
     mip_building_block: reference
     relationship: see-also
-  - name: mip-cde-meta-db-setup
+  - name: mip-data-elements-meta-db-setup
     mip_building_block: reference
     relationship: other-depends-on

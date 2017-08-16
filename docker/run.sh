@@ -19,13 +19,27 @@ if [ ! -z "$@" ]; then
     fi
 fi
 
-if [ -n "$CDE_DEFINITIONS" ]; then
-  IFS=", " read -a defs <<<"$CDE_DEFINITIONS"
-  IFS=", " read -a targets <<<"$CDE_TARGET_TABLES"
-  for ((i = 0; i < "${#defs[@]}"; i++))
+if [ -n "$DATA_ELEMENTS" ]; then
+  IFS=", " read -a specs <<<"$DATA_ELEMENTS"
+  for ((i = 0; i < "${#specs[@]}"; i++))
   do
-    /insert-CDE-definition.sh ${defs[$i]} ${targets[$i]}
+    IFS="|" read -a spec <<<"${specs[$i]}"
+    source="${spec[0]}"
+    target_table="${spec[1]}"
+    /insert-data-elements.sh "$source" "$target_table"
   done
 fi
 
-exec dockerize $DOCKERIZE_OPTS flyway $@
+if [ -n "$HIERARCHY_PATCHES" ]; then
+  IFS=", " read -a specs <<<"$HIERARCHY_PATCHES"
+  for ((i = 0; i < "${#specs[@]}"; i++))
+  do
+    IFS="|" read -a spec <<<"${specs[$i]}"
+    source="${spec[0]}"
+    patch="${spec[1]}"
+    target_table="${spec[2]}"
+    /insert-patched-hierarchy.sh "$source" "$patch" "$target_table"
+  done
+fi
+
+exec dockerize $DOCKERIZE_OPTS flyway -callbacks=eu.humanbrainproject.mip.migrations.meta.ApplyHierarchyPatchesCallback $@

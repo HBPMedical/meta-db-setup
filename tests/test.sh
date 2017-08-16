@@ -24,9 +24,12 @@ else
   DOCKER_COMPOSE="sudo docker-compose"
 fi
 
+trap '$DOCKER_COMPOSE rm -f' SIGINT SIGQUIT
+
 $DOCKER_COMPOSE up -d --remove-orphans meta_db
-$DOCKER_COMPOSE run wait_dbs
+$DOCKER_COMPOSE build meta_db_setup
 $DOCKER_COMPOSE build meta_db_check
+$DOCKER_COMPOSE run wait_dbs
 
 echo
 echo "Test initial database migration"

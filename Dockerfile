@@ -28,12 +28,11 @@ COPY sql/V1_0__create.sql \
      sql/V2_0__add_target_table.sql \
      sql/V2_1__add_hierarchy_patch_table.sql /flyway/sql/
 
-COPY docker/CDE-definition.sql.tmpl /src/
-COPY docker/run.sh docker/insert-CDE-definition.sh /
+COPY docker/data-elements.sql.tmpl docker/patch-hierarchy.sql.tmpl /src/
+COPY docker/run.sh docker/insert-data-elements.sh docker/insert-patched-hierarchy.sh /
 COPY variables_schema.json /src/
-COPY tests/test-variables.json /src/variables/test.json
 
-RUN chmod +x /run.sh /insert-CDE-definition.sh
+RUN chmod +x /run.sh /insert-data-elements.sh /insert-patched-hierarchy.sh
 
 ENV FLYWAY_DBMS=postgresql \
     FLYWAY_HOST=db \
@@ -43,7 +42,8 @@ ENV FLYWAY_DBMS=postgresql \
     FLYWAY_PASSWORD=meta \
     FLYWAY_SCHEMAS=public \
     FLYWAY_MIGRATION_PACKAGE="eu/humanbrainproject/mip/migrations/meta" \
-    CDE_DEFINITIONS=""
+    DATA_ELEMENTS="" \
+    PATCHED_HIERARCHIES=""
 
 ENV IMAGE="hbpmip/data-db-setup:$VERSION"
 
