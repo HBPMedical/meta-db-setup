@@ -19,7 +19,7 @@ It uses Flyway to perform the versioned database migrations.
 Run:
 
 ```console
-$ docker run -i -t --rm -e FLYWAY_HOST=`hostname` hbpmip/meta-db-setup:1.1.3 migrate
+$ docker run -i -t --rm -e FLYWAY_HOST=`hostname` hbpmip/meta-db-setup:2.0.0 migrate
 ```
 
 where the environment variables are:
