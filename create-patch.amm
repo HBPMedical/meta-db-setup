@@ -1,9 +1,10 @@
 #!/usr/bin/env amm
 
 import $ivy.`org.gnieh::diffson-circe:2.2.1`, gnieh.diffson.circe._
+import $ivy.`com.lihaoyi::ammonite-ops:1.0.0`, ammonite.ops._
 
-val variables = read! wd/"variables.json"
-val variablesClm = read! wd/"variables-clm.json"
-val patch = JsonDiff.diff(variables, variablesClm, false)
+val mipVariables = read! pwd/RelPath("../mip-cde-meta-db-setup/variables.json")
+val targetVariables = read! pwd/"variables.json"
+val patch = JsonDiff.diff(mipVariables, targetVariables, false)
 
-write(wd/"clm-patch.json", patch.toString)
+write(pwd/"my.patch.json", patch.toString)
