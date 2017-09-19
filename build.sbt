@@ -30,7 +30,7 @@ lazy val library =
     object Version {
       val scalaCheck = "1.13.5"
       val scalaTest  = "3.0.3"
-      val doobieVersion = "0.4.2"
+      val doobieVersion = "0.4.4"
       val diffsonVersion = "2.2.1"
       val flywayDbVersion = "4.2.0"
     }
