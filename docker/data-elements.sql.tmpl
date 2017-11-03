@@ -1,6 +1,7 @@
 DELETE from meta_variables where source='{{ .Env.SOURCE }}';
-INSERT INTO meta_variables (source, target_table, hierarchy) VALUES (
+INSERT INTO meta_variables (source, target_table, histogram_groupings, hierarchy) VALUES (
   '{{ .Env.SOURCE }}',
   '{{ .Env.TARGET_TABLE }}',
+  '{{ .Env.HISTOGRAM_GROUPINGS }}',
   '{{ .Env.JSON_HIERARCHY }}'
 );

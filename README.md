@@ -40,12 +40,16 @@ Child images should follow the following procedure to be able to load their meta
 
 #### List of Data Elements (aka hierarchy of variables)
 
-Define the environment variable DATA_ELEMENTS defining a comma-separated list of data elements definitions, where each element definition is of the form <data elements name>|<target table>.
+Define the environment variable DATA_ELEMENTS defining a space-separated list of data elements definitions, where each element definition is of the form <data elements name>|<target table>|<list of groupings for histograms view>.
+
+* __data element name__ is the name of this organisation of variables. It should point to file /src/variables/<data elements name>.json located inside the Docker image.
+* __target table__ should be the name of the table or view to use to retrieve features for algorithms and data exploration.
+* __list of groupings for histograms view__ should be a comma separated list of columns in the target table that defines a default breakdown of a dataset into several histograms with groupings, where each column defined here will create an histogram grouping values on the group by column.
 
 For example,
 
 ```
-  ENV DATA_ELEMENTS=test-set|main_features_table
+  ENV DATA_ELEMENTS=test-set|main_features_table|dataset,gender,agegroup,alzheimerbroadcategory
 ```
 
 Then for each data element definition, place a file named [data elements name].json into folder /src/variables/ describing the hierarchy of variables and following schema [variables_schema.json](variables_schema.json)

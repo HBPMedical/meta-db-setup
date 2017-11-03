@@ -20,13 +20,14 @@ if [ ! -z "$@" ]; then
 fi
 
 if [ -n "$DATA_ELEMENTS" ]; then
-  IFS=", " read -a specs <<<"$DATA_ELEMENTS"
+  IFS=" " read -a specs <<<"$DATA_ELEMENTS"
   for ((i = 0; i < "${#specs[@]}"; i++))
   do
     IFS="|" read -a spec <<<"${specs[$i]}"
     source="${spec[0]}"
     target_table="${spec[1]}"
-    /insert-data-elements.sh "$source" "$target_table"
+    histogram_groupings="${spec[2]}"
+    /insert-data-elements.sh "$source" "$target_table" "$histogram_groupings"
   done
 fi
 

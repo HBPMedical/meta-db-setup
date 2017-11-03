@@ -28,16 +28,20 @@ import cats.instances.all._
 case class Patch(newSource: String,
                  originalHierarchy: Json,
                  hierarchyPatch: Json,
-                 targetTable: String)
+                 targetTable: String,
+                 histogramGroupings: List[String])
 
 class ApplyHierarchyPatchesCallback extends BaseFlywayCallback {
 
   @SuppressWarnings(Array("org.wartremover.warts.Any", "org.wartremover.warts.NonUnitStatements"))
   override def afterMigrate(connection: Connection): Unit = {
 
+    implicit val ListMeta: Meta[List[String]] =
+      Meta[String].nxmap(_.split(",").toList , _.mkString(","))
+
     val patchesQuery: ConnectionIO[List[Patch]] =
       sql"""SELECT new_source as newSource, v.hierarchy as originalHierarchy, p.hierarchy_patch as hierarchyPatch,
-                   p.target_table as targetTable
+                   p.target_table as targetTable, v.histogram_groupings as histogramGroupings
             FROM hierarchy_patches p
             INNER JOIN meta_variables v on p.original_source = v.source """
         .query[Patch]
@@ -50,12 +54,12 @@ class ApplyHierarchyPatchesCallback extends BaseFlywayCallback {
     // And then foldMap over this ConnectionInterpreter
     val result = patchesQuery.foldMap(nat).run(connection).unsafePerformIO
 
-    type HierarchySource = (String, Json, String)
+    type HierarchySource = (String, Json, String, List[String])
     val patches: List[HierarchySource] = result.map { patch =>
       val jsonPatch        = JsonPatch(patch.hierarchyPatch)
       val patchedVariables = jsonPatch(patch.originalHierarchy)
 
-      (patch.newSource, patchedVariables, patch.targetTable)
+      (patch.newSource, patchedVariables, patch.targetTable, patch.histogramGroupings)
     }
 
     def deleteSources(ps: List[String]): ConnectionIO[Int] = {
@@ -64,7 +68,7 @@ class ApplyHierarchyPatchesCallback extends BaseFlywayCallback {
     }
 
     def insertSources(ps: List[HierarchySource]): ConnectionIO[Int] = {
-      val sql = "INSERT into meta_variables (source, hierarchy, target_table) VALUES (?, ?, ?)"
+      val sql = "INSERT into meta_variables (source, hierarchy, target_table, histogram_groupings) VALUES (?, ?, ?, ?)"
       Update[HierarchySource](sql).updateMany(ps)
     }
 

@@ -26,7 +26,9 @@ COPY --from=build-scala-env /sources/target/scala-2.12/meta-db-setup.jar /flyway
 
 COPY sql/V1_0__create.sql \
      sql/V2_0__add_target_table.sql \
-     sql/V2_1__add_hierarchy_patch_table.sql /flyway/sql/
+     sql/V2_1__add_hierarchy_patch_table.sql \
+     sql/V2_2__add_histogram_groupings.sql \
+       /flyway/sql/
 
 COPY docker/data-elements.sql.tmpl docker/patch-hierarchy.sql.tmpl /src/
 COPY docker/run.sh docker/insert-data-elements.sh docker/insert-patched-hierarchy.sh /

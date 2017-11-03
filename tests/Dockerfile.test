@@ -4,5 +4,5 @@ FROM hbpmip/meta-db-setup:latest
 COPY test-variables.json /src/variables/test.json
 COPY new-test.patch.json /src/patches/new-test.patch.json
 
-ENV DATA_ELEMENTS=test|test_table \
+ENV DATA_ELEMENTS=test|test_table|montrealcognitiveassessment,minimentalstate \
     HIERARCHY_PATCHES=test|new-test|test_table

@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 2.1.0
+
+* Add column histogram_groupings to provide a default breakdown of a dataset into several histograms with groupings on one column each.
+
 ## 2.0.0
 
 * Support patching hierarchy jsons to generate new sets of variables definitions
