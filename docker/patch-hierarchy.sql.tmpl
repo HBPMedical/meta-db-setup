@@ -1,7 +1,8 @@
 DELETE from hierarchy_patches where new_source='{{ .Env.NEW_SOURCE }}';
-INSERT INTO hierarchy_patches (new_source, original_source, target_table, hierarchy_patch) VALUES (
+INSERT INTO hierarchy_patches (new_source, original_source, target_table, histogram_groupings, hierarchy_patch) VALUES (
   '{{ .Env.NEW_SOURCE }}',
   '{{ .Env.SOURCE }}',
   '{{ .Env.TARGET_TABLE }}',
+  '{{ .Env.HISTOGRAM_GROUPINGS }}',
   '{{ .Env.JSON_PATCH }}'
 );

@@ -1,6 +1,7 @@
 # Build stage for Java classes
-FROM bigtruedata/sbt:0.13.15-2.11.8 as build-scala-env
+FROM hbpmip/scala-base-build:0.13.16-2 as build-scala-env
 
+RUN apk add --update --no-cache git
 ENV HOME=/root
 COPY project/ /sources/project/
 COPY build.sbt /sources/
