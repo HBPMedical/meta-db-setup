@@ -41,7 +41,7 @@ class ApplyHierarchyPatchesCallback extends BaseFlywayCallback {
 
     val patchesQuery: ConnectionIO[List[Patch]] =
       sql"""SELECT new_source as newSource, v.hierarchy as originalHierarchy, p.hierarchy_patch as hierarchyPatch,
-                   p.target_table as targetTable, v.histogram_groupings as histogramGroupings
+                   p.target_table as targetTable, p.histogram_groupings as histogramGroupings
             FROM hierarchy_patches p
             INNER JOIN meta_variables v on p.original_source = v.source """
         .query[Patch]

@@ -32,14 +32,15 @@ if [ -n "$DATA_ELEMENTS" ]; then
 fi
 
 if [ -n "$HIERARCHY_PATCHES" ]; then
-  IFS=", " read -a specs <<<"$HIERARCHY_PATCHES"
+  IFS=" " read -a specs <<<"$HIERARCHY_PATCHES"
   for ((i = 0; i < "${#specs[@]}"; i++))
   do
     IFS="|" read -a spec <<<"${specs[$i]}"
     source="${spec[0]}"
     patch="${spec[1]}"
     target_table="${spec[2]}"
-    /insert-patched-hierarchy.sh "$source" "$patch" "$target_table"
+    histogram_groupings="${spec[3]}"
+    /insert-patched-hierarchy.sh "$source" "$patch" "$target_table" "$histogram_groupings"
   done
 fi
 

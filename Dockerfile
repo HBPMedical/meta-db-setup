@@ -1,7 +1,6 @@
 # Build stage for Java classes
 FROM bigtruedata/sbt:0.13.15-2.11.8 as build-scala-env
 
-RUN apk add --update --no-cache git
 ENV HOME=/root
 COPY project/ /sources/project/
 COPY build.sbt /sources/
@@ -28,6 +27,7 @@ COPY sql/V1_0__create.sql \
      sql/V2_0__add_target_table.sql \
      sql/V2_1__add_hierarchy_patch_table.sql \
      sql/V2_2__add_histogram_groupings.sql \
+     sql/V2_2_1__add_histogram_groupings.sql \
        /flyway/sql/
 
 COPY docker/data-elements.sql.tmpl docker/patch-hierarchy.sql.tmpl /src/
