@@ -72,14 +72,22 @@ lazy val commonSettings =
       "-target:jvm-1.8",
       "-encoding", "UTF-8"
     ),
+    javacOptions ++= Seq("-source", "1.8", "-target", "1.8", "-Xlint"),
     unmanagedSourceDirectories.in(Compile) := Seq(scalaSource.in(Compile).value),
     unmanagedSourceDirectories.in(Test) := Seq(scalaSource.in(Test).value),
     wartremoverWarnings in (Compile, compile) ++= Warts.unsafe,
-    test in assembly := {}
+    fork in run := true,
+    test in assembly := {},
+    fork in Test := false,
+    parallelExecution in Test := false
 )
 
 lazy val gitSettings =
   Seq(
+    git.gitTagToVersionNumber := { tag: String =>
+      if (tag matches "[0-9]+\\..*") Some(tag)
+      else None
+    },
     git.useGitDescribe := true
   )
 

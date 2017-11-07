@@ -1,16 +1,15 @@
 # Build stage for Java classes
-FROM hbpmip/scala-base-build:0.13.16-2 as build-scala-env
+FROM hbpmip/scala-base-build:0.13.16-4 as build-scala-env
 
-RUN apk add --update --no-cache git
 ENV HOME=/root
-COPY project/ /sources/project/
-COPY build.sbt /sources/
-WORKDIR /sources
+COPY project/ /build/project/
+COPY build.sbt /build/
 
 # Run sbt on an empty project and force it to download most of its dependencies to fill the cache
 RUN sbt compile
 
-COPY src/ /sources/src/
+COPY src/ /build/src/
+COPY .git/ /build/.git/
 
 RUN sbt assembly
 
@@ -22,7 +21,7 @@ ARG BUILD_DATE
 ARG VCS_REF
 ARG VERSION
 
-COPY --from=build-scala-env /sources/target/scala-2.12/meta-db-setup.jar /flyway/jars/
+COPY --from=build-scala-env /build/target/scala-2.12/meta-db-setup.jar /flyway/jars/
 
 COPY sql/V1_0__create.sql \
      sql/V2_0__add_target_table.sql \
