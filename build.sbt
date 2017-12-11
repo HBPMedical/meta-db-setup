@@ -30,17 +30,17 @@ lazy val library =
     object Version {
       val scalaCheck = "1.13.5"
       val scalaTest  = "3.0.3"
-      val doobieVersion = "0.4.4"
-      val diffsonVersion = "2.2.1"
-      val flywayDbVersion = "4.2.0"
+      val doobie = "0.4.4"
+      val diffson = "2.2.1"
+      val flywayDb = "4.2.0"
     }
     val scalaCheck: ModuleID = "org.scalacheck" %% "scalacheck" % Version.scalaCheck
     val scalaTest: ModuleID = "org.scalatest"  %% "scalatest"  % Version.scalaTest
-    val doobieCore: ModuleID = "org.tpolecat" %% "doobie-core-cats" % Version.doobieVersion
-    val doobiePostgres: ModuleID =  "org.tpolecat" %% "doobie-postgres-cats" % Version.doobieVersion
-    val doobieSpecs2: ModuleID = "org.tpolecat" %% "doobie-specs2-cats" % Version.doobieVersion
-    val diffson: ModuleID = "org.gnieh" %% "diffson-circe" % Version.diffsonVersion
-    val flywayDb: ModuleID = "org.flywaydb" % "flyway-core" % Version.flywayDbVersion
+    val doobieCore: ModuleID = "org.tpolecat" %% "doobie-core-cats" % Version.doobie
+    val doobiePostgres: ModuleID =  "org.tpolecat" %% "doobie-postgres-cats" % Version.doobie
+    val doobieSpecs2: ModuleID = "org.tpolecat" %% "doobie-specs2-cats" % Version.doobie
+    val diffson: ModuleID = "org.gnieh" %% "diffson-circe" % Version.diffson
+    val flywayDb: ModuleID = "org.flywaydb" % "flyway-core" % Version.flywayDb
     // "org.specs2" %% "specs2-core" % "3.8.9" % "test"
   }
 
