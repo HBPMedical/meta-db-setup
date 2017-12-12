@@ -121,3 +121,9 @@ the work to the project under the project's open source license. Whether or not 
 explicitly, by submitting any copyrighted material via pull request, email, or other means you
 agree to license the material under the project's open source license and warrant that you have the
 legal authority to do so.
+
+# Acknowledgements
+
+This work has been funded by the European Union Seventh Framework Program (FP7/2007­2013) under grant agreement no. 604102 (HBP)
+
+This work is part of SP8 of the Human Brain Project (SGA1).
