@@ -30,15 +30,15 @@ lazy val library =
     object Version {
       val scalaCheck = "1.13.5"
       val scalaTest  = "3.0.3"
-      val doobie = "0.4.4"
+      val doobie = "0.5.0"
       val diffson = "2.2.1"
       val flywayDb = "4.2.0"
     }
     val scalaCheck: ModuleID = "org.scalacheck" %% "scalacheck" % Version.scalaCheck
     val scalaTest: ModuleID = "org.scalatest"  %% "scalatest"  % Version.scalaTest
-    val doobieCore: ModuleID = "org.tpolecat" %% "doobie-core-cats" % Version.doobie
-    val doobiePostgres: ModuleID =  "org.tpolecat" %% "doobie-postgres-cats" % Version.doobie
-    val doobieSpecs2: ModuleID = "org.tpolecat" %% "doobie-specs2-cats" % Version.doobie
+    val doobieCore: ModuleID = "org.tpolecat" %% "doobie-core" % Version.doobie
+    val doobiePostgres: ModuleID =  "org.tpolecat" %% "doobie-postgres" % Version.doobie
+    val doobieSpecs2: ModuleID = "org.tpolecat" %% "doobie-specs2" % Version.doobie
     val diffson: ModuleID = "org.gnieh" %% "diffson-circe" % Version.diffson
     val flywayDb: ModuleID = "org.flywaydb" % "flyway-core" % Version.flywayDb
     // "org.specs2" %% "specs2-core" % "3.8.9" % "test"
@@ -95,5 +95,5 @@ lazy val scalafmtSettings =
   Seq(
     scalafmtOnCompile := true,
     scalafmtOnCompile.in(Sbt) := false,
-    scalafmtVersion := "1.1.0"
+    scalafmtVersion := "1.4.0"
   )

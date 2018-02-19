@@ -17,13 +17,13 @@
 package eu.humanbrainproject.mip.migrations.meta
 
 import org.flywaydb.core.api.callback.BaseFlywayCallback
-import doobie.imports._
-import fs2.interop.cats._
+import doobie._, doobie.implicits._
 import java.sql.Connection
 import doobie.free.KleisliInterpreter
 import io.circe.Json
 import gnieh.diffson.circe._
 import cats.instances.all._
+import cats.effect.IO
 
 case class Patch(newSource: String,
                  originalHierarchy: Json,
@@ -37,7 +37,7 @@ class ApplyHierarchyPatchesCallback extends BaseFlywayCallback {
   override def afterMigrate(connection: Connection): Unit = {
 
     implicit val ListMeta: Meta[List[String]] =
-      Meta[String].nxmap(_.split(",").toList , _.mkString(","))
+      Meta[String].xmap(_.split(",").toList, _.mkString(","))
 
     val patchesQuery: ConnectionIO[List[Patch]] =
       sql"""SELECT new_source as newSource, v.hierarchy as originalHierarchy, p.hierarchy_patch as hierarchyPatch,
@@ -45,14 +45,14 @@ class ApplyHierarchyPatchesCallback extends BaseFlywayCallback {
             FROM hierarchy_patches p
             INNER JOIN meta_variables v on p.original_source = v.source """
         .query[Patch]
-        .list
+        .to[List]
 
     // Creating an KleisliInterpreter for some Catchable: Suspendable
-    val kleisliInt = KleisliInterpreter[IOLite]
+    val kleisliInt = KleisliInterpreter[IO]
     // Using the default ConnectionInterpreter:
     val nat = kleisliInt.ConnectionInterpreter
     // And then foldMap over this ConnectionInterpreter
-    val result = patchesQuery.foldMap(nat).run(connection).unsafePerformIO
+    val result = patchesQuery.foldMap(nat).run(connection).unsafeRunSync
 
     type HierarchySource = (String, Json, String, List[String])
     val patches: List[HierarchySource] = result.map { patch =>
@@ -68,7 +68,8 @@ class ApplyHierarchyPatchesCallback extends BaseFlywayCallback {
     }
 
     def insertSources(ps: List[HierarchySource]): ConnectionIO[Int] = {
-      val sql = "INSERT into meta_variables (source, hierarchy, target_table, histogram_groupings) VALUES (?, ?, ?, ?)"
+      val sql =
+        "INSERT into meta_variables (source, hierarchy, target_table, histogram_groupings) VALUES (?, ?, ?, ?)"
       Update[HierarchySource](sql).updateMany(ps)
     }
 
@@ -77,7 +78,7 @@ class ApplyHierarchyPatchesCallback extends BaseFlywayCallback {
       added <- insertSources(patches)
     } yield (rm, added)
 
-    regenerateMeta.foldMap(nat).run(connection).unsafePerformIO
+    regenerateMeta.foldMap(nat).run(connection).unsafeRunSync
     ()
 
   }
