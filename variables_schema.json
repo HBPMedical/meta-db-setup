@@ -1,5 +1,15 @@
 {
   "definitions": {
+    "dataset": {
+      "description": "Description of a dataset",
+      "properties": {
+        "code": {
+          "description": "Code identifying the dataset",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "enumeration": {
       "description": "A code-value match",
       "properties": {
@@ -34,6 +44,13 @@
         "code": {
           "description": "Identifier for the group",
           "type": "string"
+        },
+        "datasets": {
+          "description": "List of datasets containing this variable",
+          "items": {
+            "$ref": "#/definitions/dataset"
+          },
+          "type": "array"
         },
         "description": {
           "description": "Human readable description of the group",
@@ -88,7 +105,13 @@
         },
         "sql_type": {
           "description": "SQL type of the variable stored in a relational database (PostgresQL)",
-          "type": "string"
+          "enum": [
+            "int",
+            "numeric",
+            "char",
+            "varchar",
+            "timestamp"
+          ]
         },
         "type": {
           "description": "Type of the variable",
