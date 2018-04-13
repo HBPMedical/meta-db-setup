@@ -22,6 +22,8 @@ ARG BUILD_DATE
 ARG VCS_REF
 ARG VERSION
 
+RUN apk update && apk add jq
+
 COPY --from=build-scala-env /sources/target/scala-2.12/meta-db-setup.jar /flyway/jars/
 
 COPY sql/V1_0__create.sql \
