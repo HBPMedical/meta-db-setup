@@ -29,10 +29,10 @@ lazy val library =
   new {
     object Version {
       val scalaCheck = "1.13.5"
-      val scalaTest  = "3.0.3"
-      val doobie = "0.5.1"
-      val diffson = "2.2.1"
-      val flywayDb = "4.2.0"
+      val scalaTest  = "3.0.5"
+      val doobie     = "0.5.2"
+      val diffson    = "2.2.1"
+      val flywayDb   = "4.2.0"
     }
     val scalaCheck: ModuleID = "org.scalacheck" %% "scalacheck" % Version.scalaCheck
     val scalaTest: ModuleID = "org.scalatest"  %% "scalatest"  % Version.scalaTest
