@@ -5,7 +5,7 @@ SOURCE=$1
 NEW_SOURCE=$2
 TARGET_TABLE=$3
 HISTOGRAM_GROUPINGS=$4
-JSON_PATCH=`cat /src/patches/$NEW_SOURCE.patch.json`
+JSON_PATCH=`cat /src/patches/$NEW_SOURCE.patch.json  | jq -c .`
 
 # Create a repeatable migration for Flyway
 SOURCE="$SOURCE" \
