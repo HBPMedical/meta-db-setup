@@ -1,17 +1,20 @@
 
 # Changelog
 
-## 2.1.0
+## 2.2.0 - 2018-05-02
+
+* Support big Json patches
+* Add datasets to variables and define an enum for sql types
+* Update libraries
+
+## 2.1.0 - 2017-11-04
 
 * Add column histogram_groupings to provide a default breakdown of a dataset into several histograms with groupings on one column each.
 
-## 2.0.0
+## 2.0.0 - 2017-08-17
 
 * Support patching hierarchy jsons to generate new sets of variables definitions
 * Changed configuration by environment variables for the list of variables definitions to insert. It now uses DATA_ELEMENTS environment variable.
-
-## 1.2.0
-
 * Add sql_type to variables
 
 ## 1.1.1 - 2017-05-24
