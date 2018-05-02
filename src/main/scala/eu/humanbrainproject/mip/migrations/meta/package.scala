@@ -16,7 +16,7 @@
 
 package eu.humanbrainproject.mip.migrations
 
-import doobie.imports.Meta
+import doobie.Meta
 import io.circe.Json
 import io.circe.parser.parse
 import org.postgresql.util.PGobject

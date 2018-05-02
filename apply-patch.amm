@@ -1,6 +1,6 @@
 #!/usr/bin/env amm
 
-import $ivy.`org.gnieh::diffson-circe:2.2.1`, gnieh.diffson.circe._
+import $ivy.`org.gnieh::diffson-circe:3.0.0`, gnieh.diffson.circe._
 import $ivy.`com.lihaoyi::ammonite-ops:1.0.0`, ammonite.ops._
 
 val variables = read! pwd/"variables.json"
