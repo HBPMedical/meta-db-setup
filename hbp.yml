@@ -59,9 +59,9 @@ testing:
     command: ./tests/tesh.sh
 
 release_management:
-  current_version: 2.1.1
-  current_code_release: https://github.com/HBPMedical/meta-db-setup/archive/2.1.1.zip
-  current_docker_release: docker pull hbpmip/meta-db-setup:2.1.1
+  current_version: 2.2.0
+  current_code_release: https://github.com/HBPMedical/meta-db-setup/archive/2.2.0.zip
+  current_docker_release: docker pull hbpmip/meta-db-setup:2.2.0
   release_script: 'publish.sh'
 
 continuous_integration:
@@ -76,10 +76,10 @@ continuous_integration:
 distribution:
   docker_hub:
     name: hbpmip/meta-db-setup
-    current_tag: 2.1.1
+    current_tag: 2.2.0
     url: https://hub.docker.com/r/hbpmip/meta-db-setup/
     badge: https://img.shields.io/badge/docker-hbpmip%2Fmeta--db--setup-008bb8.svg
-    command: docker pull hbpmip/meta-db-setup:2.1.1
+    command: docker pull hbpmip/meta-db-setup:2.2.0
 
 planning:
   github:
