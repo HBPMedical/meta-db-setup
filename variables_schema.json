@@ -1,6 +1,10 @@
 {
+  "$id": "https://mip.humanbrainproject.eu/variables_schema.json",
+  "$schema": "http://json-schema.org/draft-06/schema",
+  "additionalProperties": false,
   "definitions": {
     "dataset": {
+      "additionalProperties": false,
       "description": "Description of a dataset",
       "properties": {
         "code": {
@@ -8,9 +12,13 @@
           "type": "string"
         }
       },
+      "required": [
+        "code"
+      ],
       "type": "object"
     },
     "enumeration": {
+      "additionalProperties": false,
       "description": "A code-value match",
       "properties": {
         "code": {
@@ -36,9 +44,14 @@
           "description": "Human readable value displayed in the user interface"
         }
       },
+      "required": [
+        "code",
+        "value"
+      ],
       "type": "object"
     },
     "group": {
+      "additionalProperties": false,
       "description": "A group object represents a category which groups and variables can belong to.",
       "properties": {
         "code": {
@@ -50,7 +63,8 @@
           "items": {
             "$ref": "#/definitions/dataset"
           },
-          "type": "array"
+          "type": "array",
+          "uniqueItems": true
         },
         "description": {
           "description": "Human readable description of the group",
@@ -61,7 +75,8 @@
           "items": {
             "$ref": "#/definitions/group"
           },
-          "type": "array"
+          "type": "array",
+          "uniqueItems": true
         },
         "label": {
           "description": "Label used to display the group in the user interface",
@@ -72,9 +87,14 @@
           "items": {
             "$ref": "#/definitions/variable"
           },
-          "type": "array"
+          "type": "array",
+          "uniqueItems": true
         }
       },
+      "required": [
+        "code",
+        "label"
+      ],
       "type": "object"
     },
     "methodology": {
@@ -82,6 +102,37 @@
       "type": "string"
     },
     "variable": {
+      "additionalProperties": true,
+      "anyOf": [
+        {
+          "properties": {
+            "type": {
+              "enum": [
+                "binominal",
+                "polynominal"
+              ]
+            }
+          },
+          "required": [
+            "enumerations"
+          ]
+        },
+        {
+          "properties": {
+            "type": {
+              "enum": [
+                "integer",
+                "real",
+                "boolean",
+                "date",
+                "text",
+                "image"
+              ]
+            }
+          },
+          "required": []
+        }
+      ],
       "description": "A variable object represents a business variable. All variable information should be stored in this object.",
       "properties": {
         "code": {
@@ -91,6 +142,14 @@
         "description": {
           "description": "Human readable description of the variable",
           "type": "string"
+        },
+        "enumerations": {
+          "description": "List of possible values",
+          "items": {
+            "$ref": "#/definitions/enumeration"
+          },
+          "type": "array",
+          "uniqueItems": true
         },
         "label": {
           "description": "Label used to display the variable in the user interface",
@@ -131,6 +190,12 @@
           "type": "string"
         }
       },
+      "required": [
+        "code",
+        "label",
+        "type",
+        "methodology"
+      ],
       "type": "object"
     }
   },
@@ -163,5 +228,9 @@
       "type": "array"
     }
   },
+  "required": [
+    "code",
+    "label"
+  ],
   "type": "object"
 }
