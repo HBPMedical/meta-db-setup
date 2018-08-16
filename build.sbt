@@ -15,6 +15,7 @@ lazy val `meta-db-setup` =
           library.doobiePostgres,
           library.diffson,
           library.flywayDb,
+          library.jsonSchema,
           library.scalaCheck % Test,
           library.scalaTest  % Test
         )
@@ -33,6 +34,7 @@ lazy val library =
       val doobie     = "0.5.2"
       val diffson    = "3.0.0"
       val flywayDb   = "4.2.0"
+      val jsonSchema = "1.9.1"
     }
     val scalaCheck: ModuleID = "org.scalacheck" %% "scalacheck" % Version.scalaCheck
     val scalaTest: ModuleID = "org.scalatest"  %% "scalatest"  % Version.scalaTest
@@ -41,8 +43,11 @@ lazy val library =
     val doobieSpecs2: ModuleID = "org.tpolecat" %% "doobie-specs2" % Version.doobie
     val diffson: ModuleID = "org.gnieh" %% "diffson-circe" % Version.diffson
     val flywayDb: ModuleID = "org.flywaydb" % "flyway-core" % Version.flywayDb
+    val jsonSchema: ModuleID = "com.github.everit-org.json-schema" % "org.everit.json.schema" % Version.jsonSchema
     // "org.specs2" %% "specs2-core" % "3.8.9" % "test"
   }
+
+resolvers += "jitpack.io" at "https://jitpack.io"
 
 // *****************************************************************************
 // Settings

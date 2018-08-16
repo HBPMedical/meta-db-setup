@@ -10,6 +10,7 @@ RUN sbt compile
 
 COPY src/ /build/src/
 COPY .git/ /build/.git/
+COPY .scalafmt.conf /build/
 
 RUN sbt assembly
 

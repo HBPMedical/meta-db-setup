@@ -16,14 +16,23 @@
 
 package eu.humanbrainproject.mip.migrations.meta
 
-import org.flywaydb.core.api.callback.BaseFlywayCallback
-import doobie._, doobie.implicits._
 import java.sql.Connection
+
+import org.flywaydb.core.api.callback.BaseFlywayCallback
+import doobie._
+import doobie.implicits._
 import doobie.free.KleisliInterpreter
 import io.circe.Json
 import gnieh.diffson.circe._
 import cats.instances.all._
 import cats.effect.IO
+import javax.xml.bind.ValidationException
+import org.everit.json.schema.Validator
+import org.everit.json.schema.loader.SchemaLoader
+import org.json.JSONObject
+import org.json.JSONTokener
+
+import scala.io.Source
 
 case class Patch(newSource: String,
                  originalHierarchy: Json,
@@ -33,7 +42,11 @@ case class Patch(newSource: String,
 
 class ApplyHierarchyPatchesCallback extends BaseFlywayCallback {
 
-  @SuppressWarnings(Array("org.wartremover.warts.Any", "org.wartremover.warts.NonUnitStatements"))
+  @SuppressWarnings(
+    Array("org.wartremover.warts.Any",
+          "org.wartremover.warts.NonUnitStatements",
+          "org.wartremover.warts.Throw")
+  )
   override def afterMigrate(connection: Connection): Unit = {
 
     implicit val ListMeta: Meta[List[String]] =
@@ -47,6 +60,11 @@ class ApplyHierarchyPatchesCallback extends BaseFlywayCallback {
         .query[Patch]
         .to[List]
 
+    val schemaSource    = Source.fromFile("/src/variables_schema.json").getLines().mkString("")
+    val rawSchema       = new JSONObject(new JSONTokener(schemaSource))
+    val schema          = SchemaLoader.load(rawSchema)
+    val schemaValidator = Validator.builder().failEarly().build()
+
     // Creating an KleisliInterpreter for some Catchable: Suspendable
     val kleisliInt = KleisliInterpreter[IO]
     // Using the default ConnectionInterpreter:
@@ -58,6 +76,18 @@ class ApplyHierarchyPatchesCallback extends BaseFlywayCallback {
     val patches: List[HierarchySource] = result.map { patch =>
       val jsonPatch        = JsonPatch(patch.hierarchyPatch)
       val patchedVariables = jsonPatch(patch.originalHierarchy)
+
+      println(s"Checking validity of ${patch.newSource}...")
+
+      try {
+        schemaValidator
+          .performValidation(schema, new JSONObject(patchedVariables.toString)) // throws a ValidationException if this object is invalid
+      } catch {
+        case e: ValidationException =>
+          println(s"Invalid hierarchy: ${e.getMessage}")
+          println(patchedVariables.toString)
+          throw e
+      }
 
       (patch.newSource, patchedVariables, patch.targetTable, patch.histogramGroupings)
     }

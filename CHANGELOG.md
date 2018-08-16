@@ -1,6 +1,11 @@
 
 # Changelog
 
+## 2.3.0 - 2018-08-16
+
+* Update variables_schema.json to validate better the Json files for variable hierarchies
+* Automatically validate variable hierarchies Jsons when inserting them into the database
+
 ## 2.2.0 - 2018-05-02
 
 * Support big Json patches

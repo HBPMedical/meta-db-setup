@@ -5,9 +5,19 @@
     "value": {
       "code": "mycategory",
       "description": "My additional category",
+      "enumerations": [
+        {
+          "code": "cat1",
+          "label": "Category #1"
+        },
+        {
+          "code": "cat2",
+          "label": "Category #2"
+        }
+      ],
       "label": "My Category",
       "methodology": "test",
-      "type": "string"
+      "type": "polynominal"
     }
   }
 ]

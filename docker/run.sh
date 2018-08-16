@@ -44,4 +44,4 @@ if [ -n "$HIERARCHY_PATCHES" ]; then
   done
 fi
 
-exec dockerize $DOCKERIZE_OPTS flyway -callbacks=eu.humanbrainproject.mip.migrations.meta.ApplyHierarchyPatchesCallback $@
+exec dockerize $DOCKERIZE_OPTS flyway -callbacks=eu.humanbrainproject.mip.migrations.meta.CheckHierarchyCallback,eu.humanbrainproject.mip.migrations.meta.ApplyHierarchyPatchesCallback $@

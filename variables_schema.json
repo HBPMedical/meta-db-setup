@@ -32,7 +32,7 @@
           ],
           "description": "Value stored in the database"
         },
-        "value": {
+        "label": {
           "anyOf": [
             {
               "type": "string"
@@ -46,7 +46,7 @@
       },
       "required": [
         "code",
-        "value"
+        "label"
       ],
       "type": "object"
     },
