@@ -15,7 +15,8 @@ COPY .scalafmt.conf /build/
 RUN sbt assembly
 
 # Final image
-FROM hbpmip/flyway:4.2.0-5
+FROM boxfuse/flyway:5.1.4-alpine
+
 MAINTAINER Ludovic Claude <ludovic.claude@chuv.ch>
 
 ARG BUILD_DATE

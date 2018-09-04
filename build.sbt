@@ -33,7 +33,7 @@ lazy val library =
       val scalaTest  = "3.0.5"
       val doobie     = "0.5.2"
       val diffson    = "3.0.0"
-      val flywayDb   = "4.2.0"
+      val flywayDb   = "5.1.4"
       val jsonSchema = "1.9.1"
     }
     val scalaCheck: ModuleID = "org.scalacheck" %% "scalacheck" % Version.scalaCheck
