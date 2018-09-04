@@ -31,13 +31,11 @@ COPY sql/V1_0__create.sql \
      sql/V2_1__add_hierarchy_patch_table.sql \
      sql/V2_2__add_histogram_groupings.sql \
      sql/V2_2_1__add_histogram_groupings.sql \
+     sql/V2_3__drop_hierarchy_patch_table.sql \
        /flyway/sql/
 
-COPY docker/data-elements.sql.tmpl docker/patch-hierarchy.sql.tmpl /src/
-COPY docker/run.sh docker/insert-data-elements.sh docker/insert-patched-hierarchy.sh /
+COPY docker/run.sh /
 COPY variables_schema.json /src/
-
-RUN chmod +x /run.sh /insert-data-elements.sh /insert-patched-hierarchy.sh
 
 ENV FLYWAY_DBMS=postgresql \
     FLYWAY_HOST=db \
@@ -47,7 +45,7 @@ ENV FLYWAY_DBMS=postgresql \
     FLYWAY_PASSWORD=meta \
     FLYWAY_SCHEMAS=public \
     FLYWAY_MIGRATION_PACKAGE="eu/humanbrainproject/mip/migrations/meta" \
-    DATA_ELEMENTS="" \
+    TAXONOMIES="" \
     PATCHED_HIERARCHIES=""
 
 ENV IMAGE="hbpmip/data-db-setup:$VERSION"

@@ -40,7 +40,7 @@ Child images should follow the following procedure to be able to load their meta
 
 #### List of Data Elements (aka hierarchy of variables)
 
-Define the environment variable DATA_ELEMENTS defining a space-separated list of data elements definitions, where each element definition is of the form [data elements name]|[target table]|[list of groupings for histograms view].
+Define the environment variable TAXONOMIES defining a space-separated list of data elements definitions, where each element definition is of the form [data elements name]|[target table]|[list of groupings for histograms view].
 
 * __data element name__ is the name of this organisation of variables. It should point to file /src/variables/[data elements name].json located inside the Docker image.
 * __target table__ should be the name of the table or view to use to retrieve features for algorithms and data exploration.
@@ -49,14 +49,14 @@ Define the environment variable DATA_ELEMENTS defining a space-separated list of
 For example,
 
 ```
-  ENV DATA_ELEMENTS=test-set|main_features_table|dataset,gender,agegroup,alzheimerbroadcategory
+  ENV TAXONOMIES=test-set|main_features_table|dataset,gender,agegroup,alzheimerbroadcategory
 ```
 
 Then for each data element definition, place a file named [data elements name].json into folder /src/variables/ describing the hierarchy of variables and following schema [variables_schema.json](variables_schema.json)
 
 #### List of Json patches to apply to existing Data Elements definitions
 
-Define the environment variable HIERARCHY_PATCHES defining a space-separated list of Json patches to apply to existing data elements, where each patch description has the form [data elements name to patch]|[new data elements name]|[target table]|[list of groupings for histograms view].
+Define the environment variable TAXONOMY_PATCHES defining a space-separated list of Json patches to apply to existing data elements, where each patch description has the form [data elements name to patch]|[new data elements name]|[target table]|[list of groupings for histograms view].
 
 * __data elements name to patch__ is the name of the original organisation of variables that we want to update.
 * __new data elements name__ is the name of the new organisation of variables. It should point to file /src/patches/[data elements name to patch].patch.json located inside the Docker image and containing the JSON patch definition to apply to existing list of variables for [data elements name to patch].
@@ -66,7 +66,7 @@ Define the environment variable HIERARCHY_PATCHES defining a space-separated lis
 For example,
 
 ```
-  ENV HIERARCHY_PATCHES=test-set|test-set-with-custom-vars|main_features_table|dataset,gender,custom_category
+  ENV TAXONOMY_PATCHES=test-set|test-set-with-custom-vars|main_features_table|dataset,gender,custom_category
 ```
 
 Each new data elements definition, target table and hierarchy json will be inserted into the meta table. For each new data elements, we generate the json describing the hierarchy of variables by taking the hierarchy json from the original data elements definition and applying to it a [Json patch](http://jsonpatch.com/) loaded from the container folder /src/patches/ and named [new data elements name].json
