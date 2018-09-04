@@ -1,6 +1,13 @@
 
 # Changelog
 
+## 2.4.0 - 2018-09-04
+
+* Partially renaming 'hierarchy' into 'taxonomy'
+* Support large Json taxonomies and patches
+* Rename environment variables from DATA_ELEMENTS to TAXONOMIES and HIERARCHY_PATCHES to TAXONOMY_PATCHES
+* Upgrade Flyway to 5.1.4
+
 ## 2.3.0 - 2018-08-16
 
 * Update variables_schema.json to validate better the Json files for variable hierarchies

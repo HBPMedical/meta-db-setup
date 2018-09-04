@@ -36,6 +36,7 @@ COPY sql/V1_0__create.sql \
        /flyway/sql/
 
 COPY docker/run.sh /
+COPY docker/flyway.conf.tmpl /flyway/conf/
 COPY variables_schema.json /src/
 
 ENV FLYWAY_DBMS=postgresql \

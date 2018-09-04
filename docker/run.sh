@@ -19,4 +19,4 @@ if [ ! -z "$@" ]; then
     fi
 fi
 
-exec dockerize $DOCKERIZE_OPTS flyway -callbacks=eu.humanbrainproject.mip.migrations.meta.SetupTaxonomiesCallback,eu.humanbrainproject.mip.migrations.meta.SetupTaxonomyPatchesCallback $@
+exec dockerize $DOCKERIZE_OPTS flyway -configFiles=/flyway/conf/flyway.conf -callbacks=eu.humanbrainproject.mip.migrations.meta.SetupTaxonomiesCallback,eu.humanbrainproject.mip.migrations.meta.SetupTaxonomyPatchesCallback $@
