@@ -53,6 +53,7 @@ class SetupTaxonomiesCallback extends Callback with ValidateTaxonomySchema {
   override def handle(event: Event,
                       context: Context): Unit = event match {
     case Event.AFTER_MIGRATE => setupTaxonomies(context.getConnection)
+    case _ => ()
 
   }
 

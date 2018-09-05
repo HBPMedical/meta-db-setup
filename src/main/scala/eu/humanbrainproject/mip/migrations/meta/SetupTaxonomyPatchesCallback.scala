@@ -66,6 +66,7 @@ class SetupTaxonomyPatchesCallback extends Callback with ValidateTaxonomySchema 
   override def handle(event: Event,
                       context: Context): Unit = event match {
     case Event.AFTER_MIGRATE => setupTaxonomyPatches(context.getConnection)
+    case _ => ()
 
   }
 
@@ -74,7 +75,7 @@ class SetupTaxonomyPatchesCallback extends Callback with ValidateTaxonomySchema 
           "org.wartremover.warts.NonUnitStatements",
           "org.wartremover.warts.Throw")
   )
-  override def setupTaxonomyPatches(connection: Connection): Unit = {
+  def setupTaxonomyPatches(connection: Connection): Unit = {
 
     implicit val ListMeta: Meta[List[String]] =
       Meta[String].xmap(_.split(",").toList, _.mkString(","))

@@ -2,6 +2,7 @@
 set -e
 
 DOCKERIZE_OPTS=""
+FLYWAY_OPTS=""
 
 if [ ! -z "$@" ]; then
     if [ -z "$FLYWAY_HOST" ] || [ -z "$FLYWAY_DBMS" ]
@@ -16,7 +17,8 @@ if [ ! -z "$@" ]; then
         exit 1
     else
         DOCKERIZE_OPTS="-wait tcp://${FLYWAY_HOST}:${FLYWAY_PORT:-5432} -template /flyway/conf/flyway.conf.tmpl:/flyway/conf/flyway.conf"
+        FLYWAY_OPTS="-configFiles=/flyway/conf/flyway.conf"
     fi
 fi
 
-exec dockerize $DOCKERIZE_OPTS flyway -configFiles=/flyway/conf/flyway.conf -callbacks=eu.humanbrainproject.mip.migrations.meta.SetupTaxonomiesCallback,eu.humanbrainproject.mip.migrations.meta.SetupTaxonomyPatchesCallback $@
+exec dockerize $DOCKERIZE_OPTS flyway $FLYWAY_OPTS -callbacks=eu.humanbrainproject.mip.migrations.meta.SetupTaxonomiesCallback,eu.humanbrainproject.mip.migrations.meta.SetupTaxonomyPatchesCallback $@

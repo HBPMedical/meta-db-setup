@@ -15,15 +15,13 @@ COPY .scalafmt.conf /build/
 RUN sbt assembly
 
 # Final image
-FROM boxfuse/flyway:5.1.4-alpine
+FROM hbpmip/flyway:5.1.4-0
 
 MAINTAINER Ludovic Claude <ludovic.claude@chuv.ch>
 
 ARG BUILD_DATE
 ARG VCS_REF
 ARG VERSION
-
-RUN apk update && apk add jq
 
 COPY --from=build-scala-env /build/target/scala-2.12/meta-db-setup.jar /flyway/jars/
 
@@ -36,7 +34,6 @@ COPY sql/V1_0__create.sql \
        /flyway/sql/
 
 COPY docker/run.sh /
-COPY docker/flyway.conf.tmpl /flyway/conf/
 COPY variables_schema.json /src/
 
 ENV FLYWAY_DBMS=postgresql \
@@ -53,6 +50,7 @@ ENV FLYWAY_DBMS=postgresql \
 ENV IMAGE="hbpmip/data-db-setup:$VERSION"
 
 WORKDIR /flyway
+ENTRYPOINT ["/run.sh"]
 CMD ["migrate"]
 
 LABEL org.label-schema.build-date=$BUILD_DATE \
