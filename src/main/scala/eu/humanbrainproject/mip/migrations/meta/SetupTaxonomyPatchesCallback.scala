@@ -18,7 +18,7 @@ package eu.humanbrainproject.mip.migrations.meta
 
 import java.sql.Connection
 
-import org.flywaydb.core.api.callback.BaseFlywayCallback
+import org.flywaydb.core.api.callback.{ Callback, Context, Event }
 import doobie._
 import doobie.implicits._
 import doobie.free.KleisliInterpreter
@@ -53,14 +53,28 @@ case class Taxonomy(source: String,
 
 }
 
-class SetupTaxonomyPatchesCallback extends BaseFlywayCallback with ValidateTaxonomySchema {
+class SetupTaxonomyPatchesCallback extends Callback with ValidateTaxonomySchema {
+
+  override def supports(event: Event,
+                        context: Context): Boolean = event == Event.AFTER_MIGRATE
+
+  override def canHandleInTransaction(
+                                       event: Event,
+                                       context: Context
+                                     ): Boolean = true
+
+  override def handle(event: Event,
+                      context: Context): Unit = event match {
+    case Event.AFTER_MIGRATE => setupTaxonomyPatches(context.getConnection)
+
+  }
 
   @SuppressWarnings(
     Array("org.wartremover.warts.Any",
           "org.wartremover.warts.NonUnitStatements",
           "org.wartremover.warts.Throw")
   )
-  override def afterMigrate(connection: Connection): Unit = {
+  override def setupTaxonomyPatches(connection: Connection): Unit = {
 
     implicit val ListMeta: Meta[List[String]] =
       Meta[String].xmap(_.split(",").toList, _.mkString(","))
