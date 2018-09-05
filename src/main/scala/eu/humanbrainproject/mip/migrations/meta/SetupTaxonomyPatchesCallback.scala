@@ -138,6 +138,9 @@ class SetupTaxonomyPatchesCallback extends Callback with ValidateTaxonomySchema 
       .split(" ")
       .map { rawDef =>
         val t = rawDef.split("\\|")
+        if (t.length < 4) {
+          throw new IllegalArgumentException(s"Invalid format for TAXONOMY_PATCHES environment variable. Found ${t.toList.mkString("|")}, expecting source|new_source|target_table|histogram_groupings")
+        }
         TaxonomyPatchDefinition(t(0), t(1), t(2), t(3).split(",").toList)
       }
       .toList
