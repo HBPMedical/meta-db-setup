@@ -111,14 +111,16 @@ class SetupTaxonomiesCallback extends Callback with ValidateTaxonomySchema {
       .filter(_.nonEmpty)
       .map { rawDef =>
         val t            = rawDef.split("\\|")
-        if (t.length < 3) {
+        if (t.length < 2) {
           throw new IllegalArgumentException(s"Invalid format for TAXONOMIES environment variable. Found ${t.toList.mkString("|")}, expecting source|target_table|histogram_groupings")
         }
-        val source       = t(0)
+        val source       = t.head
         val taxonomy     = Source.fromFile(s"/src/variables/$source.json").mkString
         val taxonomyJson = parse(taxonomy).left.map[Json](e => throw e).merge
+        val targetTable  = t(1)
+        val histogramGroupings = if (t.length == 2) Nil else t(2).split(",").toList
 
-        TaxonomyDefinition(source, taxonomyJson, t(1), t(2).split(",").toList)
+        TaxonomyDefinition(source, taxonomyJson, targetTable, histogramGroupings)
       }
       .toList
   }

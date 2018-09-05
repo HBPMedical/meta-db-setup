@@ -139,10 +139,12 @@ class SetupTaxonomyPatchesCallback extends Callback with ValidateTaxonomySchema 
       .filter(_.nonEmpty)
       .map { rawDef =>
         val t = rawDef.split("\\|")
-        if (t.length < 4) {
+        if (t.length < 3) {
           throw new IllegalArgumentException(s"Invalid format for TAXONOMY_PATCHES environment variable. Found ${t.toList.mkString("|")}, expecting source|new_source|target_table|histogram_groupings")
         }
-        TaxonomyPatchDefinition(t(0), t(1), t(2), t(3).split(",").toList)
+        val histogramGroupings = if (t.length == 3) Nil else t(3).split(",").toList
+
+        TaxonomyPatchDefinition(t(0), t(1), t(2), histogramGroupings)
       }
       .toList
   }
