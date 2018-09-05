@@ -45,7 +45,7 @@ ENV FLYWAY_DBMS=postgresql \
     FLYWAY_SCHEMAS=public \
     FLYWAY_MIGRATION_PACKAGE="eu/humanbrainproject/mip/migrations/meta" \
     TAXONOMIES="" \
-    PATCHED_HIERARCHIES=""
+    TAXONOMY_PATCHES=""
 
 ENV IMAGE="hbpmip/data-db-setup:$VERSION"
 

@@ -108,6 +108,7 @@ class SetupTaxonomiesCallback extends Callback with ValidateTaxonomySchema {
     val env = Option(System.getenv("TAXONOMIES")).getOrElse("")
     env
       .split(" ")
+      .filter(_.nonEmpty)
       .map { rawDef =>
         val t            = rawDef.split("\\|")
         if (t.length < 3) {

@@ -136,6 +136,7 @@ class SetupTaxonomyPatchesCallback extends Callback with ValidateTaxonomySchema 
     val env = Option(System.getenv("TAXONOMY_PATCHES")).getOrElse("")
     env
       .split(" ")
+      .filter(_.nonEmpty)
       .map { rawDef =>
         val t = rawDef.split("\\|")
         if (t.length < 4) {
