@@ -21,4 +21,11 @@ if [ ! -z "$@" ]; then
     fi
 fi
 
-exec dockerize $DOCKERIZE_OPTS flyway $FLYWAY_OPTS -callbacks=eu.humanbrainproject.mip.migrations.meta.SetupTaxonomiesCallback,eu.humanbrainproject.mip.migrations.meta.SetupTaxonomyPatchesCallback $@
+FLYWAY_OPTS="$FLYWAY_OPTS -callbacks=eu.humanbrainproject.mip.migrations.meta.SetupTaxonomiesCallback,eu.humanbrainproject.mip.migrations.meta.SetupTaxonomyPatchesCallback"
+
+dockerize $DOCKERIZE_OPTS flyway $FLYWAY_OPTS $@|| {
+  err=$?
+  echo "Migration failed. It was using the following environment variables:"
+  env | grep -v PASSWORD | grep -v PWD
+  exit $err
+}
