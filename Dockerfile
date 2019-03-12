@@ -17,7 +17,7 @@ RUN sbt assembly
 # Final image
 FROM hbpmip/flyway:5.1.4-0
 
-COPY --from=build-scala-env /build/target/scala-2.12/meta-db-setup.jar /flyway/jars/
+COPY --from=scala-build-env /build/target/scala-2.12/meta-db-setup.jar /flyway/jars/
 
 COPY sql/V1_0__create.sql \
      sql/V2_0__add_target_table.sql \
