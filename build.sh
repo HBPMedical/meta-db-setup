@@ -26,7 +26,7 @@ else
   DOCKER="sudo docker"
 fi
 
-IMAGE="hbpmip/meta-db-setup"
+source ./.dockerimage
 VCS_REF=$(git describe --tags --dirty)
 VERSION=$(git describe --tags --dirty)
 
