@@ -22,10 +22,10 @@ import org.flywaydb.core.api.callback.{ Callback, Context, Event }
 import doobie._
 import doobie.free.KleisliInterpreter
 import cats.instances.all._
-import cats.effect.IO
+import cats.effect.{ ContextShift, IO }
 import io.circe.Json
 import io.circe.parser.parse
-import javax.xml.bind.ValidationException
+import org.everit.json.schema.ValidationException
 import org.json.JSONObject
 
 import scala.io.Source
@@ -62,40 +62,48 @@ class SetupTaxonomiesCallback extends Callback with ValidateTaxonomySchema {
   def setupTaxonomies(connection: Connection): Unit = {
 
     implicit val ListMeta: Meta[List[String]] =
-      Meta[String].xmap(_.split(",").toList, _.mkString(","))
+      Meta[String].timap(_.split(",").toList)(_.mkString(","))
 
-    // Creating an KleisliInterpreter for some Catchable: Suspendable
-    val kleisliInt = KleisliInterpreter[IO]
-    // Using the default ConnectionInterpreter:
-    val nat = kleisliInt.ConnectionInterpreter
+    implicit val cs: ContextShift[IO] =
+      IO.contextShift(scala.concurrent.ExecutionContext.Implicits.global)
+    val blockingExecutionContextR = ExecutionContexts.cachedThreadPool[IO]
 
-    def deleteTaxonomies(ps: List[String]): ConnectionIO[Int] = {
-      val sql = "DELETE FROM meta_variables WHERE source = ?"
-      Update[String](sql).updateMany(ps)
-    }
+    blockingExecutionContextR
+      .use { blockingExecutionContext =>
+        // Creating an KleisliInterpreter for some Catchable: Suspendable
+        val kleisliInt = KleisliInterpreter[IO](blockingExecutionContext)
+        // Using the default ConnectionInterpreter:
+        val nat = kleisliInt.ConnectionInterpreter
 
-    def insertTaxonomies(ps: List[TaxonomyDefinition]): ConnectionIO[Int] = {
-      val sql =
-        "INSERT into meta_variables (source, hierarchy, target_table, histogram_groupings) VALUES (?, ?, ?, ?)"
-      Update[TaxonomyDefinition](sql).updateMany(ps)
-    }
-
-    for (taxonomy <- taxonomies) {
-      validateTaxonomy(new JSONObject(taxonomy.taxonomy))
-        .recoverWith {
-          case e: ValidationException =>
-            println(s"Invalid hierarchy: ${e.getMessage}")
-            println(taxonomy.taxonomy)
-            throw e
+        def deleteTaxonomies(ps: List[String]): ConnectionIO[Int] = {
+          val sql = "DELETE FROM meta_variables WHERE source = ?"
+          Update[String](sql).updateMany(ps)
         }
-    }
 
-    val regenerateMeta = for {
-      rm    <- deleteTaxonomies(taxonomies.map(_.source))
-      added <- insertTaxonomies(taxonomies)
-    } yield (rm, added)
+        def insertTaxonomies(ps: List[TaxonomyDefinition]): ConnectionIO[Int] = {
+          val sql =
+            "INSERT into meta_variables (source, hierarchy, target_table, histogram_groupings) VALUES (?, ?, ?, ?)"
+          Update[TaxonomyDefinition](sql).updateMany(ps)
+        }
 
-    regenerateMeta.foldMap(nat).run(connection).unsafeRunSync
+        for (taxonomy <- taxonomies) {
+          validateTaxonomy(new JSONObject(taxonomy.taxonomy))
+            .recoverWith {
+              case e: ValidationException =>
+                println(s"Invalid hierarchy: ${e.getMessage}")
+                println(taxonomy.taxonomy)
+                throw e
+            }
+        }
+
+        val regenerateMeta = for {
+          rm    <- deleteTaxonomies(taxonomies.map(_.source))
+          added <- insertTaxonomies(taxonomies)
+        } yield (rm, added)
+
+        regenerateMeta.foldMap(nat).run(connection)
+      }
+      .unsafeRunSync()
     ()
 
   }

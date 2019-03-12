@@ -26,8 +26,8 @@ import io.circe.Json
 import io.circe.parser.parse
 import gnieh.diffson.circe._
 import cats.instances.all._
-import cats.effect.IO
-import javax.xml.bind.ValidationException
+import cats.effect.{ ContextShift, IO }
+import org.everit.json.schema.ValidationException
 import org.json.JSONObject
 
 import scala.io.Source
@@ -76,7 +76,7 @@ class SetupTaxonomyPatchesCallback extends Callback with ValidateTaxonomySchema 
   def setupTaxonomyPatches(connection: Connection): Unit = {
 
     implicit val ListMeta: Meta[List[String]] =
-      Meta[String].xmap(_.split(",").toList, _.mkString(","))
+      Meta[String].timap(_.split(",").toList)(_.mkString(","))
 
     def queryTaxonomy(source: String): ConnectionIO[Json] =
       sql"""SELECT hierarchy
@@ -85,47 +85,55 @@ class SetupTaxonomyPatchesCallback extends Callback with ValidateTaxonomySchema 
         .query[Json]
         .unique
 
-    // Creating an KleisliInterpreter for some Catchable: Suspendable
-    val kleisliInt = KleisliInterpreter[IO]
-    // Using the default ConnectionInterpreter:
-    val nat = kleisliInt.ConnectionInterpreter
-    // And then foldMap over this ConnectionInterpreter
+    implicit val cs: ContextShift[IO] =
+      IO.contextShift(scala.concurrent.ExecutionContext.Implicits.global)
+    val blockingExecutionContextR = ExecutionContexts.cachedThreadPool[IO]
 
-    val newTaxonomies: List[Taxonomy] = taxonomyPatches.map { patch =>
-      val jsonPatch         = JsonPatch(patch.jsonPatch)
-      val originalHierarchy = queryTaxonomy(patch.source).foldMap(nat).run(connection).unsafeRunSync
-      val patchedVariables  = jsonPatch(originalHierarchy)
+    blockingExecutionContextR.use { blockingExecutionContext =>
+      // Creating an KleisliInterpreter for some Catchable: Suspendable
+      val kleisliInt = KleisliInterpreter[IO](blockingExecutionContext)
 
-      println(s"Checking validity of ${patch.newSource}...")
+      // Using the default ConnectionInterpreter:
+      val nat = kleisliInt.ConnectionInterpreter
+      // And then foldMap over this ConnectionInterpreter
 
-      validateTaxonomy(new JSONObject(patchedVariables.toString))
-        .recoverWith {
-          case e: ValidationException =>
-            println(s"Invalid hierarchy: ${e.getMessage}")
-            println(patchedVariables.toString)
-            throw e
-        }
+      val newTaxonomies: List[Taxonomy] = taxonomyPatches.map { patch =>
+        val jsonPatch = JsonPatch(patch.jsonPatch)
+        val originalHierarchy =
+          queryTaxonomy(patch.source).foldMap(nat).run(connection).unsafeRunSync
+        val patchedVariables = jsonPatch(originalHierarchy)
 
-      Taxonomy(patch.newSource, patchedVariables, patch.targetTable, patch.histogramGroupings)
-    }
+        println(s"Checking validity of ${patch.newSource}...")
 
-    def deleteSources(ps: List[String]): ConnectionIO[Int] = {
-      val sql = "DELETE FROM meta_variables WHERE source = ?"
-      Update[String](sql).updateMany(ps)
-    }
+        validateTaxonomy(new JSONObject(patchedVariables.toString))
+          .recoverWith {
+            case e: ValidationException =>
+              println(s"Invalid hierarchy: ${e.getMessage}")
+              println(patchedVariables.toString)
+              throw e
+          }
 
-    def insertSources(ps: List[Taxonomy]): ConnectionIO[Int] = {
-      val sql =
-        "INSERT into meta_variables (source, hierarchy, target_table, histogram_groupings) VALUES (?, ?, ?, ?)"
-      Update[Taxonomy](sql).updateMany(ps)
-    }
+        Taxonomy(patch.newSource, patchedVariables, patch.targetTable, patch.histogramGroupings)
+      }
 
-    val regenerateMeta = for {
-      rm    <- deleteSources(newTaxonomies.map(_.source))
-      added <- insertSources(newTaxonomies)
-    } yield (rm, added)
+      def deleteSources(ps: List[String]): ConnectionIO[Int] = {
+        val sql = "DELETE FROM meta_variables WHERE source = ?"
+        Update[String](sql).updateMany(ps)
+      }
 
-    regenerateMeta.foldMap(nat).run(connection).unsafeRunSync
+      def insertSources(ps: List[Taxonomy]): ConnectionIO[Int] = {
+        val sql =
+          "INSERT into meta_variables (source, hierarchy, target_table, histogram_groupings) VALUES (?, ?, ?, ?)"
+        Update[Taxonomy](sql).updateMany(ps)
+      }
+
+      val regenerateMeta = for {
+        rm    <- deleteSources(newTaxonomies.map(_.source))
+        added <- insertSources(newTaxonomies)
+      } yield (rm, added)
+
+      regenerateMeta.foldMap(nat).run(connection)
+    }.unsafeRunSync
     ()
 
   }

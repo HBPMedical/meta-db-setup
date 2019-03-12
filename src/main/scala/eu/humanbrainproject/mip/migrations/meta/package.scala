@@ -30,10 +30,12 @@ package object meta {
 
   @SuppressWarnings(Array("org.wartremover.warts.Throw"))
   implicit val JsonMeta: Meta[Json] =
-    Meta
+    Meta.Advanced
       .other[PGobject]("jsonb")
-      .xmap[Json](
-        a => parse(a.getValue).left.map[Json](e => throw e).merge, // failure raises an exception
+      .timap[Json](
+        // failure raises an exception
+        a => parse(a.getValue).left.map[Json](e => throw e).merge,
+      )(
         a => {
           val o = new PGobject
           o.setType("jsonb")
