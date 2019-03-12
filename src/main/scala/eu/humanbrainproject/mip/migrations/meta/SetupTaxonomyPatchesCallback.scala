@@ -55,18 +55,16 @@ case class Taxonomy(source: String,
 
 class SetupTaxonomyPatchesCallback extends Callback with ValidateTaxonomySchema {
 
-  override def supports(event: Event,
-                        context: Context): Boolean = event == Event.AFTER_MIGRATE
+  override def supports(event: Event, context: Context): Boolean = event == Event.AFTER_MIGRATE
 
   override def canHandleInTransaction(
-                                       event: Event,
-                                       context: Context
-                                     ): Boolean = true
+      event: Event,
+      context: Context
+  ): Boolean = true
 
-  override def handle(event: Event,
-                      context: Context): Unit = event match {
+  override def handle(event: Event, context: Context): Unit = event match {
     case Event.AFTER_MIGRATE => setupTaxonomyPatches(context.getConnection)
-    case _ => ()
+    case _                   => ()
 
   }
 
@@ -140,7 +138,9 @@ class SetupTaxonomyPatchesCallback extends Callback with ValidateTaxonomySchema 
       .map { rawDef =>
         val t = rawDef.split("\\|")
         if (t.length < 3) {
-          throw new IllegalArgumentException(s"Invalid format for TAXONOMY_PATCHES environment variable. Found ${t.toList.mkString("|")}, expecting source|new_source|target_table|histogram_groupings")
+          throw new IllegalArgumentException(
+            s"Invalid format for TAXONOMY_PATCHES environment variable. Found ${t.toList.mkString("|")}, expecting source|new_source|target_table|histogram_groupings"
+          )
         }
         val histogramGroupings = if (t.length == 3) Nil else t(3).split(",").toList
 

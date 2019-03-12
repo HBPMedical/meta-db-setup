@@ -1,5 +1,5 @@
 # Build stage for Java classes
-FROM hbpmip/scala-base-build:1.1.0-2 as build-scala-env
+FROM hbpmip/scala-base-build:1.2.6-8 as scala-build-env
 
 ENV HOME=/root
 COPY project/ /build/project/
@@ -16,12 +16,6 @@ RUN sbt assembly
 
 # Final image
 FROM hbpmip/flyway:5.1.4-0
-
-MAINTAINER Ludovic Claude <ludovic.claude@chuv.ch>
-
-ARG BUILD_DATE
-ARG VCS_REF
-ARG VERSION
 
 COPY --from=build-scala-env /build/target/scala-2.12/meta-db-setup.jar /flyway/jars/
 
@@ -46,6 +40,10 @@ ENV FLYWAY_DBMS=postgresql \
     FLYWAY_MIGRATION_PACKAGE="eu/humanbrainproject/mip/migrations/meta" \
     TAXONOMIES="" \
     TAXONOMY_PATCHES=""
+
+ARG BUILD_DATE
+ARG VCS_REF
+ARG VERSION
 
 ENV IMAGE="hbpmip/data-db-setup:$VERSION"
 

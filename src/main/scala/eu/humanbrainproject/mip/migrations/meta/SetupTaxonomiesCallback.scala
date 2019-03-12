@@ -41,19 +41,16 @@ case class TaxonomyDefinition(source: String,
 
 class SetupTaxonomiesCallback extends Callback with ValidateTaxonomySchema {
 
-
-  override def supports(event: Event,
-                        context: Context): Boolean = event == Event.AFTER_MIGRATE
+  override def supports(event: Event, context: Context): Boolean = event == Event.AFTER_MIGRATE
 
   override def canHandleInTransaction(
       event: Event,
       context: Context
   ): Boolean = true
 
-  override def handle(event: Event,
-                      context: Context): Unit = event match {
+  override def handle(event: Event, context: Context): Unit = event match {
     case Event.AFTER_MIGRATE => setupTaxonomies(context.getConnection)
-    case _ => ()
+    case _                   => ()
 
   }
 
@@ -110,14 +107,16 @@ class SetupTaxonomiesCallback extends Callback with ValidateTaxonomySchema {
       .split(" ")
       .filter(_.nonEmpty)
       .map { rawDef =>
-        val t            = rawDef.split("\\|")
+        val t = rawDef.split("\\|")
         if (t.length < 2) {
-          throw new IllegalArgumentException(s"Invalid format for TAXONOMIES environment variable. Found ${t.toList.mkString("|")}, expecting source|target_table|histogram_groupings")
+          throw new IllegalArgumentException(
+            s"Invalid format for TAXONOMIES environment variable. Found ${t.toList.mkString("|")}, expecting source|target_table|histogram_groupings"
+          )
         }
-        val source       = t.head
-        val taxonomy     = Source.fromFile(s"/src/variables/$source.json").mkString
-        val taxonomyJson = parse(taxonomy).left.map[Json](e => throw e).merge
-        val targetTable  = t(1)
+        val source             = t.head
+        val taxonomy           = Source.fromFile(s"/src/variables/$source.json").mkString
+        val taxonomyJson       = parse(taxonomy).left.map[Json](e => throw e).merge
+        val targetTable        = t(1)
         val histogramGroupings = if (t.length == 2) Nil else t(2).split(",").toList
 
         TaxonomyDefinition(source, taxonomyJson, targetTable, histogramGroupings)

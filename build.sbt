@@ -29,12 +29,12 @@ lazy val `meta-db-setup` =
 lazy val library =
   new {
     object Version {
-      val scalaCheck = "1.13.5"
-      val scalaTest  = "3.0.5"
-      val doobie     = "0.5.2"
-      val diffson    = "3.0.0"
-      val flywayDb   = "5.1.4"
-      val jsonSchema = "1.9.1"
+      val scalaCheck = "1.14.0"
+      val scalaTest  = "3.0.6"
+      val doobie     = "0.6.0"
+      val diffson    = "3.1.1"
+      val flywayDb   = "5.2.4"
+      val jsonSchema = "1.11.0"
     }
     val scalaCheck: ModuleID = "org.scalacheck" %% "scalacheck" % Version.scalaCheck
     val scalaTest: ModuleID = "org.scalatest"  %% "scalatest"  % Version.scalaTest
@@ -60,7 +60,7 @@ lazy val settings =
 
 lazy val commonSettings =
   Seq(
-    scalaVersion := "2.12.3",
+    scalaVersion := "2.12.8",
     organization := "eu.humanbrainproject.mip",
     organizationName := "LREN CHUV",
     startYear := Some(2017),
@@ -100,5 +100,5 @@ lazy val scalafmtSettings =
   Seq(
     scalafmtOnCompile := true,
     scalafmtOnCompile.in(Sbt) := false,
-    scalafmtVersion := "1.4.0"
+    scalafmtVersion := "1.5.1"
   )
