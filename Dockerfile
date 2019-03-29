@@ -15,7 +15,7 @@ COPY .scalafmt.conf /build/
 RUN sbt assembly
 
 # Final image
-FROM hbpmip/flyway:5.1.4-0
+FROM hbpmip/flyway:5.2.4-0
 
 COPY --from=scala-build-env /build/target/scala-2.12/meta-db-setup.jar /flyway/jars/
 
