@@ -1,6 +1,14 @@
 
 # Changelog
 
+## 2.5.0 - 2019-03-29
+
+* Add validity checks for environment vars
+* Allow empty vars
+* Allow empty histogram groupings
+* Inform user on failed migrations
+* [dev] Update Flyway to 5.2.4, update Doobie to 0.6.0
+
 ## 2.4.0 - 2018-09-04
 
 * Partially renaming 'hierarchy' into 'taxonomy'
