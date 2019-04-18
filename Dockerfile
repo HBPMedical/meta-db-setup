@@ -1,5 +1,5 @@
 # Build stage for Java classes
-FROM hbpmip/scala-base-build:1.2.6-8 as scala-build-env
+FROM hbpmip/scala-base-build:1.2.8-0 as scala-build-env
 
 ENV HOME=/root
 COPY project/ /build/project/
