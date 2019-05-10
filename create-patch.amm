@@ -1,14 +1,14 @@
 #!/usr/bin/env amm
 
 import $ivy.`org.gnieh::diffson-circe:3.0.0`, gnieh.diffson.circe._
-import $ivy.`com.lihaoyi::ammonite-ops:1.0.0`, ammonite.ops._
+import $ivy.`com.lihaoyi::ammonite-ops:1.6.6`, ammonite.ops._
 
 @main
-def main(targetJsonFile: String = "variables.json", patchFile: String = "my.patch.json"): Unit = {
+def main(targetJsonFile: String = "variables.json", patchFile: String = "my.patch.json", sourceJsonFile: String = "../mip-cde-meta-db-setup/variables.json"): Unit = {
 
-  val mipVariables = read! pwd/RelPath("../mip-cde-meta-db-setup/variables.json")
-  val targetVariables = read! pwd/targetJsonFile
-  val patch = JsonDiff.diff(mipVariables, targetVariables, false)
+  val variables = read! pwd/RelPath(sourceJsonFile)
+  val targetVariables = read! pwd/RelPath(targetJsonFile)
+  val patch = JsonDiff.diff(variables, targetVariables, false)
 
-  write(pwd/patchFile, patch.toString)
+  write(pwd/RelPath(patchFile), patch.toString)
 }
